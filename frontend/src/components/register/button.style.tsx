@@ -3,13 +3,12 @@ import styled from '../../theme'
 
 interface Props {
   className?: string,
-  type?: 'submit' | 'button',
   children: ReactNode
 }
 
 class Element extends Component<Props, object> {
   render() {
-    return <button className={this.props.className} type={this.props.type}>{ this.props.children }</button>
+    return <button className={this.props.className}>{ this.props.children }</button>
   }
 }
 

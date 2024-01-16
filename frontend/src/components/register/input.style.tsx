@@ -1,15 +1,14 @@
-import { ChangeEvent, Component } from 'react'
+import { Component } from 'react'
 import styled from '../../theme'
 
 interface Props {
   className?: string
   type: string
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 class Element extends Component<Props, object> {
   render() {
-    return <input type={this.props.type} className={this.props.className} onChange={this.props.onChange} />
+    return <input type={this.props.type} className={this.props.className} />
   }
 }
 

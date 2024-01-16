@@ -12,6 +12,11 @@ export class CreateUserDto {
   @ApiProperty()
   public readonly login: string
 
+  @Length(1, 20)
+  @IsString()
+  @ApiProperty()
+  public readonly nickname: string
+  
   @MinLength(8)
   @IsString()
   @ApiProperty()

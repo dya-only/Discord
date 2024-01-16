@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   public async loginByPassword (dto: LoginByPasswordDto): Promise<string> {
-    const user = await this.usersService.findUserByLogin(dto.login, true)
+    const user = await this.usersService.findUserByEmail(dto.email, true)
     if (user === undefined) {
       throw new NotFoundException({
         success: false,

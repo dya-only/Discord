@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common'
-import { EventsService } from './events.service'
+import { Body, Controller, Get, Param, Post, Res, UseGuards } from '@nestjs/common'
 import { Response } from 'express'
+import { AuthGuard } from 'src/auth/auth.guard'
+import { EventsService } from './events.service'
 import { CreateChatDto } from './dto/CreateChatDto'
-import { Chat } from './entities/chat.entity'
 
 @Controller('events')
+@UseGuards(AuthGuard)
 export class EventsController {
   constructor (
     private eventsService: EventsService

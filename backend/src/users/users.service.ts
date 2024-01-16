@@ -21,6 +21,7 @@ export class UsersService {
     await this.users.insert({
       email: createUserDto.email,
       login: createUserDto.login,
+      nickname: createUserDto.nickname,
       bio: createUserDto.bio,
       avatar: 'default.png',
       password,
@@ -32,6 +33,10 @@ export class UsersService {
     return await this.findUserByLogin(login) !== undefined
   }
 
+  public async checkEmailClaim (email: string): Promise<boolean> {
+    return await this.findUserByEmail(email) !== undefined
+  }
+
   public async findUserByLogin (login: string, secret = false): Promise<User | undefined> {
     return await this.users.findOne({
       where: { login },
@@ -39,6 +44,24 @@ export class UsersService {
         id: true,
         email: true,
         login: true,
+        nickname: true,
+        bio: true,
+        createdAt: true,
+        avatar: true,
+        password: secret,
+        salt: secret
+      }
+    }) ?? undefined
+  }
+
+  public async findUserByEmail (email: string, secret = false): Promise<User | undefined> {
+    return await this.users.findOne({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        login: true,
+        nickname: true,
         bio: true,
         createdAt: true,
         avatar: true,

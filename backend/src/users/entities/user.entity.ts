@@ -32,6 +32,12 @@ export class User {
   @ApiProperty()
   public readonly login: string
 
+  @Column()
+  @Length(1, 20)
+  @IsString()
+  @ApiProperty()
+  public readonly nickname: string
+
   @Column({
     select: false,
   })
