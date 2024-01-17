@@ -1,7 +1,7 @@
-import { Injectable, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
-import { LoginByPasswordDto } from './dto/LoginByPasswordDto';
+import { Injectable, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt'
+import { UsersService } from 'src/users/users.service'
+import { LoginByPasswordDto } from './dto/LoginByPasswordDto'
 
 @Injectable()
 export class AuthService {
