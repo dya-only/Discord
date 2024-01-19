@@ -16,6 +16,7 @@ const StyledMain = styled(Element)`
   width: 100vw;
   height: 100vh;
   display: flex;
+  justify-content: flex-start;
 `
 
 export default StyledMain
