@@ -4,6 +4,7 @@ import { AuthGuard } from 'src/auth/auth.guard'
 import { EventsService } from './events.service'
 import { CreateChatDto } from './dto/CreateChatDto'
 import { UpdateChatDto } from './dto/UpdateChatDto'
+import { CreateRoomDto } from './dto/CreateRoomDto'
 
 @Controller('events')
 @UseGuards(AuthGuard)
@@ -15,7 +16,6 @@ export class EventsController {
   @Post()
   public async createChat(@Res({ passthrough: true }) res: Response, @Body() createChatDto: CreateChatDto) {
     const userId = res.locals.userId
-
     await this.eventsService.createChat(userId, createChatDto)
 
     return {
@@ -23,18 +23,17 @@ export class EventsController {
     }
   }
 
-  @Get(':roomKey')
-  public async findChat(@Param('roomKey') roomKey: string) {
+  @Get(':channelId')
+  public async findChat(@Param('channelId') channelId: number) {
     return {
       success: true,
-      body: await this.eventsService.findChat(roomKey)
+      body: await this.eventsService.findChat(channelId)
     }
   }
 
   @Patch(':chatId')
   public async updateChat(@Res({ passthrough: true }) res: Response, @Param('chatId') chatId: number, @Body() updateChatDto: UpdateChatDto) {
     const userId = res.locals.userId
-
     await this.eventsService.updateChat(userId, chatId, updateChatDto)
 
     return {
@@ -45,8 +44,21 @@ export class EventsController {
   @Delete(':chatId')
   public async deleteChat(@Res({ passthrough: true }) res: Response, @Param(':chatId') chatId: number) {
     const userId = res.locals.userId
-
     await this.eventsService.deleteChat(userId, chatId)
+
+    return {
+      success: true
+    }
+  }
+
+
+  // ---
+
+
+  @Post()
+  public async createRoom(@Res({ passthrough: true }) res: Response, @Body() createRoomDto: CreateRoomDto) {
+    const userId = res.locals.userId
+    await this.eventsService.createRoom(userId, createRoomDto)
 
     return {
       success: true

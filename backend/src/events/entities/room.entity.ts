@@ -1,7 +1,8 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsDate, IsInt, IsOptional, IsPositive, IsString, Length, MaxLength } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
+import { IsDate, IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { Chat } from './chat.entity'
+import { Channel } from './channel.entity'
+import { User } from 'src/users/entities/user.entity'
 
 @Entity({
   name: 'rooms'
@@ -16,6 +17,21 @@ export class Room {
   @ApiProperty()
   public readonly id: number
 
+  @Column()
+  @IsString()
+  @MaxLength(10)
+  @ApiProperty()
+  public readonly name: string
+
+  @Column({
+    name: 'owner_id',
+    type: 'int',
+    unsigned: true
+  })
+  @IsInt()
+  @IsPositive()
+  @ApiProperty()
+  public readonly ownerId: number
 
   @Column({
     unique: true
@@ -23,24 +39,11 @@ export class Room {
   @IsString()
   @ApiProperty()
   public readonly key: string
-  
-  @Column()
-  @Length(1, 10)
-  @IsString()
-  @ApiProperty()
-  public readonly name: string
-
-  @Column()
-  @IsString()
-  @MaxLength(20)
-  @IsOptional()
-  @ApiPropertyOptional()
-  public readonly bio?: string
 
   @Column()
   @IsString()
   @ApiProperty()
-  public readonly avatar: string
+  public readonly image: string
 
   @CreateDateColumn({
     name: 'createdat',
@@ -50,11 +53,19 @@ export class Room {
   @ApiProperty()
   public readonly createdAt: Date
 
-  // @OneToMany(() => Chat, (c) => c.room, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  //   nullable: false
-  // })
-  // @ApiProperty()
-  // public readonly chats: Chat[]
+  @OneToMany(() => Channel, (c) => c.room, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: false
+  })
+  @ApiProperty()
+  public readonly channels: Channel[]
+
+  @OneToMany(() => User, (u) => u.room, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: false
+  })
+  @ApiProperty()
+  public readonly users: User[]
 }

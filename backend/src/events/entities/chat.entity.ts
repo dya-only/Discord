@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
 import { User } from 'src/users/entities/user.entity'
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Room } from './room.entity'
+import { Channel } from './channel.entity'
 
 @Entity({
   name: 'chat'
@@ -37,14 +37,18 @@ export class Chat {
     unsigned: true,
     nullable: false
   })
+  @IsPositive()
+  @ApiProperty()
   public readonly userId: number
 
   @Column({
-    name: 'roomKey',
-    type: 'varchar',
+    name: 'channel_id',
+    type: 'int',
     nullable: false
   })
-  public readonly roomKey: string
+  @IsPositive()
+  @ApiProperty()
+  public readonly channelId: number
 
   @ManyToOne(() => User, (u) => u.chats, {
     onDelete: 'CASCADE',
@@ -58,15 +62,15 @@ export class Chat {
   @ApiProperty()
   public readonly user: User
 
-  // @ManyToOne(() => Room, (r) => r.chats, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  //   nullable: false
-  // })
-  // @JoinColumn({
-  //   name: 'roomKey',
-  //   referencedColumnName: 'key'
-  // })
-  // @ApiProperty()
-  // public readonly room: Room
+  @ManyToOne(() => Channel, (c) => c.chats, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    nullable: false
+  })
+  @JoinColumn({
+    name: 'channelId',
+    referencedColumnName: 'id'
+  })
+  @ApiProperty()
+  public readonly channel: Channel
 }

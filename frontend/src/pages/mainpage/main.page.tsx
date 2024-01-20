@@ -39,26 +39,6 @@ const MainPage = () => {
           {/* Server Icons */}
           <ServerIcon></ServerIcon>
           <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
         </nav>
 
         {/* Channel Nav */}

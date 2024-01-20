@@ -1,14 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
 
-export class CreateChatDto {
+export class CreateRoomDto {
+  @IsString()
+  @MaxLength(10)
+  @ApiProperty()
+  public readonly name: string
+
   @IsInt()
   @IsPositive()
   @ApiProperty()
-  public readonly channelId: number
+  public readonly ownerId: number
 
-  @MaxLength(1000)
   @IsString()
   @ApiProperty()
-  public readonly message: string
+  public readonly key: string
 }

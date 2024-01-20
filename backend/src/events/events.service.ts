@@ -4,29 +4,38 @@ import { Repository } from 'typeorm'
 import { Chat } from './entities/chat.entity'
 import { CreateChatDto } from './dto/CreateChatDto'
 import { UpdateChatDto } from './dto/UpdateChatDto'
+import { CreateRoomDto } from './dto/CreateRoomDto'
+import { Room } from './entities/room.entity'
+import { Channel } from './entities/channel.entity'
 
 @Injectable()
 export class EventsService {
   constructor (
     @InjectRepository(Chat)
-    private readonly chats: Repository<Chat>
+    private readonly chats: Repository<Chat>,
+
+    @InjectRepository(Room)
+    private readonly rooms: Repository<Room>,
+
+    @InjectRepository(Channel)
+    private readonly channels: Repository<Channel>
   ) {}
 
-  public async createChat (userId: number, createChatDto: CreateChatDto): Promise<void> {
+  public async createChat(userId: number, createChatDto: CreateChatDto): Promise<void> {
     await this.chats.insert({
       message: createChatDto.message,
-      roomKey: createChatDto.roomKey,
+      channelId: createChatDto.channelId,
       userId
     })
   }
 
-  public async findChat (roomKey: string): Promise<Chat[]> {
+  public async findChat(channelId: number): Promise<Chat[]> {
     return await this.chats.find({
-      where: { roomKey }
+      where: { channelId }
     })
   }
 
-  public async updateChat (userId: number, chatId: number, updateChatDto: UpdateChatDto): Promise<void> {
+  public async updateChat(userId: number, chatId: number, updateChatDto: UpdateChatDto): Promise<void> {
     const chat = await this.chats.findOne({ where: { id: chatId } })
     if (chat.userId !== userId) {
       throw new NotFoundException({
@@ -40,7 +49,7 @@ export class EventsService {
     })
   }
 
-  public async deleteChat (userId: number, chatId: number): Promise<void> {
+  public async deleteChat(userId: number, chatId: number): Promise<void> {
     const chat = await this.chats.findOne({ where: { id: chatId } })
     if (chat.userId !== userId) {
       throw new NotFoundException({
@@ -50,5 +59,13 @@ export class EventsService {
     }
 
     await this.chats.delete(chatId)
+  }
+
+  
+  // ---
+
+
+  public async createRoom(userId: number, createRoomDto: CreateRoomDto): Promise<void> {
+    await this.rooms
   }
 }
