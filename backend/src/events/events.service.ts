@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Chat } from './entities/chat.entity'
+import keygen from 'keygenerator'
 import { CreateChatDto } from './dto/CreateChatDto'
 import { UpdateChatDto } from './dto/UpdateChatDto'
 import { CreateRoomDto } from './dto/CreateRoomDto'
+import { Chat } from './entities/chat.entity'
 import { Room } from './entities/room.entity'
 import { Channel } from './entities/channel.entity'
 
@@ -66,6 +67,17 @@ export class EventsService {
 
 
   public async createRoom(userId: number, createRoomDto: CreateRoomDto): Promise<void> {
-    await this.rooms
+    await this.rooms.insert({
+      name: createRoomDto.name,
+      ownerId: userId,
+      roomKey: keygen.transaction_id(),
+      image: 'default.png'
+    })
+  }
+
+  public async findRoom(roomId: number): Promise<Room> {
+    return await this.rooms.findOne({
+      where: { id: roomId }
+    })
   }
 }

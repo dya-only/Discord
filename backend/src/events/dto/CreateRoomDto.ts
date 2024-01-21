@@ -11,8 +11,4 @@ export class CreateRoomDto {
   @IsPositive()
   @ApiProperty()
   public readonly ownerId: number
-
-  @IsString()
-  @ApiProperty()
-  public readonly key: string
 }

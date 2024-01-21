@@ -19,8 +19,7 @@ import { EventsModule } from 'src/events/events.module'
         username: configService.get('DATABASE_USERNAME', 'nestuser'),
         password: configService.get('DATABASE_PASSWORD', 'nestpassword'),
         database: configService.get('DATABASE_SCHEMA', 'nest'),
-        synchronize: configService.get('DATABASE_SYNCHRONIZE', true),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
         autoLoadEntities: true
       })
     }),

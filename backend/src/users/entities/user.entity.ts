@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IsDate, IsHexadecimal, IsInt, IsOptional, IsPositive, IsString, Length, MaxLength } from 'class-validator'
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Chat } from 'src/events/entities/chat.entity'
 import { Room } from 'src/events/entities/room.entity'
 
@@ -84,15 +84,8 @@ export class User {
   @ApiProperty()
   public readonly chats: Chat[]
 
-  @ManyToOne(() => Room, (r) => r.users, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    nullable: false
-  })
-  @JoinColumn({
-    name: 'roomId',
-    referencedColumnName: 'id'
-  })
+  @ManyToMany(() => Room, (r) => (r).users)
+  @JoinTable()
   @ApiProperty()
-  public readonly room: Room
+  rooms: Room[]
 }

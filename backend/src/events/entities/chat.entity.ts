@@ -5,7 +5,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { Channel } from './channel.entity'
 
 @Entity({
-  name: 'chat'
+  name: 'chats'
 })
 export class Chat {
   @PrimaryGeneratedColumn('increment', {
@@ -32,7 +32,7 @@ export class Chat {
   public readonly createdAt: Date
 
   @Column({
-    name: 'userId',
+    name: 'user_id',
     type: 'int',
     unsigned: true,
     nullable: false

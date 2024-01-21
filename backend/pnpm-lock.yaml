@@ -72,7 +72,7 @@ dependencies:
     specifier: ^4.7.4
     version: 4.7.4
   typeorm:
-    specifier: ^0.3.17
+    specifier: ^0.3.19
     version: 0.3.19(mysql2@3.7.0)(ts-node@10.9.2)
 
 devDependencies:

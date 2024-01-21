@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Channel } from './channel.entity'
 import { User } from 'src/users/entities/user.entity'
 
@@ -34,11 +34,12 @@ export class Room {
   public readonly ownerId: number
 
   @Column({
+    name: 'room_key',
     unique: true
   })
   @IsString()
   @ApiProperty()
-  public readonly key: string
+  public readonly roomKey: string
 
   @Column()
   @IsString()
@@ -61,11 +62,6 @@ export class Room {
   @ApiProperty()
   public readonly channels: Channel[]
 
-  @OneToMany(() => User, (u) => u.room, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    nullable: false
-  })
-  @ApiProperty()
-  public readonly users: User[]
+  @ManyToMany(() => User, (u) => (u).rooms)
+  users: User[]
 }
