@@ -102,7 +102,6 @@ export class EventsService {
         message: 'User already in room'
       })
     }
-
     
     user.rooms.push(room)
     console.log(user)
@@ -119,18 +118,14 @@ export class EventsService {
   }
   
   public async leaveRoom(userId: number, roomId: number): Promise<void> {
-    const room = await this.rooms.findOne({
-      where: { id: roomId }
+    const user = await this.users.findOne({
+      where: { id: userId },
+      relations: {
+        rooms: true
+      }
     })
-    const users = room.users.find((e) => e.id === userId)
-
-    if (users === undefined) {
-      throw new NotFoundException({
-        success: false,
-        message: 'user not found to leave'
-      })
-    }
-
-    room.users = room.users.filter((e) => e.id !== userId)
+    
+    user.rooms = user.rooms.filter((e) => e.id !== roomId)
+    await this.users.save(user)
   }
 }

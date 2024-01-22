@@ -66,7 +66,7 @@ export class EventsController {
   }
 
   @Get('room/:roomKey')
-  public async findRoomByKey(@Param() roomKey: string) {
+  public async findRoomByKey(@Param('roomKey') roomKey: string) {
     return {
       sucess: true,
       body: await this.eventsService.findRoomByKey(roomKey)
@@ -77,6 +77,16 @@ export class EventsController {
   public async joinRoom(@Res({ passthrough: true }) res: Response, @Param('roomKey') roomKey: string) {
     const userId = res.locals.userId
     await this.eventsService.joinRoom(userId, roomKey)
+
+    return {
+      success: true
+    }
+  }
+
+  @Delete('room/:roomId')
+  public async leaveRoom(@Res({ passthrough: true }) res: Response, @Param('roomId') roomId: number) {
+    const userId = res.locals.userId
+    await this.eventsService.leaveRoom(userId, roomId)
 
     return {
       success: true
