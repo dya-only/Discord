@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Channel } from './channel.entity'
 import { User } from 'src/users/entities/user.entity'
 

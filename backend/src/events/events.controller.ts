@@ -55,10 +55,28 @@ export class EventsController {
   // ---
 
 
-  @Post()
+  @Post('room')
   public async createRoom(@Res({ passthrough: true }) res: Response, @Body() createRoomDto: CreateRoomDto) {
     const userId = res.locals.userId
     await this.eventsService.createRoom(userId, createRoomDto)
+
+    return {
+      success: true
+    }
+  }
+
+  @Get('room/:roomKey')
+  public async findRoomByKey(@Param() roomKey: string) {
+    return {
+      sucess: true,
+      body: await this.eventsService.findRoomByKey(roomKey)
+    }
+  }
+
+  @Get('room/join/:roomKey')
+  public async joinRoom(@Res({ passthrough: true }) res: Response, @Param('roomKey') roomKey: string) {
+    const userId = res.locals.userId
+    await this.eventsService.joinRoom(userId, roomKey)
 
     return {
       success: true

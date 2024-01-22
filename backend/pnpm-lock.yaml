@@ -50,9 +50,9 @@ dependencies:
   cookie-parser:
     specifier: ^1.4.6
     version: 1.4.6
-  keygenerator:
-    specifier: ^1.0.4
-    version: 1.0.4
+  keygen:
+    specifier: ^0.4.0
+    version: 0.4.0
   multer:
     specifier: 1.4.5-lts.1
     version: 1.4.5-lts.1
@@ -3991,8 +3991,8 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /keygenerator@1.0.4:
-    resolution: {integrity: sha512-TIiaKqI5BNF8fKxOmwfvhEXgC5w0Lyh8iuUfjlYEOAvCc1zpti4G40oYA6Lf5UlOJBHmIvZGFOSXn7dUutN62g==}
+  /keygen@0.4.0:
+    resolution: {integrity: sha512-Fam+Q+CaIsVWneZCBYfea6SQSTEHE4mU8bkqkT7eDOWhLEgOhDZvADDxi6q6dFLtWbeWJ9Z8YgVhBW5WhkH7Xw==}
     dev: false
 
   /keyv@4.5.4:

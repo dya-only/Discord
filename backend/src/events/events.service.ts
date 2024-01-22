@@ -1,17 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import keygen from 'keygenerator'
+import { small, url } from 'keygen'
 import { CreateChatDto } from './dto/CreateChatDto'
 import { UpdateChatDto } from './dto/UpdateChatDto'
 import { CreateRoomDto } from './dto/CreateRoomDto'
 import { Chat } from './entities/chat.entity'
 import { Room } from './entities/room.entity'
 import { Channel } from './entities/channel.entity'
+import { User } from 'src/users/entities/user.entity'
 
 @Injectable()
 export class EventsService {
   constructor (
+    @InjectRepository(User)
+    private readonly users: Repository<User>,
+
     @InjectRepository(Chat)
     private readonly chats: Repository<Chat>,
 
@@ -67,17 +71,66 @@ export class EventsService {
 
 
   public async createRoom(userId: number, createRoomDto: CreateRoomDto): Promise<void> {
+    let roomKey = url(small)
+    if ((await this.rooms.findOne({ where: { roomKey } })) !== undefined) roomKey = url(small)  
+
     await this.rooms.insert({
       name: createRoomDto.name,
       ownerId: userId,
-      roomKey: keygen.transaction_id(),
-      image: 'default.png'
+      roomKey,
+      image: 'default.png',
     })
+
+    await this.joinRoom(userId, roomKey)
   }
 
-  public async findRoom(roomId: number): Promise<Room> {
+  public async joinRoom(userId: number, roomKey: string): Promise<void> {
+    const room = await this.rooms.findOne({
+      where: { roomKey }
+    })
+    
+    const user = await this.users.findOne({
+      where: { id: userId },
+      relations: {
+        rooms: true
+      }
+    })
+
+    if (user.rooms.find((e) => e.id === room.id)) {
+      throw new NotAcceptableException({
+        success: false,
+        message: 'User already in room'
+      })
+    }
+
+    
+    user.rooms.push(room)
+    console.log(user)
+    await this.users.save(user)
+  }
+
+  public async findRoomByKey(roomKey: string): Promise<Room | undefined> {
     return await this.rooms.findOne({
+      where: { roomKey },
+      relations: {
+        users: true
+      }
+    }) ?? undefined
+  }
+  
+  public async leaveRoom(userId: number, roomId: number): Promise<void> {
+    const room = await this.rooms.findOne({
       where: { id: roomId }
     })
+    const users = room.users.find((e) => e.id === userId)
+
+    if (users === undefined) {
+      throw new NotFoundException({
+        success: false,
+        message: 'user not found to leave'
+      })
+    }
+
+    room.users = room.users.filter((e) => e.id !== userId)
   }
 }

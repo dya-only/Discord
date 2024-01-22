@@ -46,10 +46,14 @@ export class UsersService {
         login: true,
         nickname: true,
         bio: true,
+        rooms: true,
         createdAt: true,
         avatar: true,
         password: secret,
-        salt: secret
+        salt: secret,
+      },
+      relations: {
+        rooms: true
       }
     }) ?? undefined
   }
@@ -63,10 +67,14 @@ export class UsersService {
         login: true,
         nickname: true,
         bio: true,
+        rooms: true,
         createdAt: true,
         avatar: true,
         password: secret,
         salt: secret
+      },
+      relations: {
+        rooms: true
       }
     }) ?? undefined
   }
@@ -77,7 +85,10 @@ export class UsersService {
 
   public async findUser (id: number): Promise<User | undefined> {
     return await this.users.findOne({
-      where: { id }
+      where: { id },
+      relations: {
+        rooms: true
+      }
     }) ?? undefined
   }
 

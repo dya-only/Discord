@@ -48,7 +48,9 @@ export class User {
   @ApiProperty()
   public readonly password: string
 
-  @Column()
+  @Column({
+    default: ''
+  })
   @IsString()
   @MaxLength(5000)
   @IsOptional()
