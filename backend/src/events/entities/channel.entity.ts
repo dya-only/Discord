@@ -32,10 +32,12 @@ export class Channel {
   public readonly createdAt: Date
 
   @Column({
-    name: 'room_id',
+    name: 'roomId',
     type: 'int',
+    unsigned: true,
     nullable: false
   })
+  @IsInt()
   @IsPositive()
   @ApiProperty()
   public readonly roomId: number

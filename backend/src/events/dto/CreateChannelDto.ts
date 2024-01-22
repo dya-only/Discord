@@ -7,7 +7,7 @@ export class CreateChannelDto {
   @ApiProperty()
   public readonly roomId: number
 
-  @MaxLength(1000)
+  @MaxLength(10)
   @IsString()
   @ApiProperty()
   public readonly name: string

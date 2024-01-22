@@ -32,7 +32,7 @@
 }
 .dmContainer:hover {
   cursor: pointer;
-  background: #6667e9;
+  background: #686bff;
   border-radius: 16px;
   transition: all .3s;
 }

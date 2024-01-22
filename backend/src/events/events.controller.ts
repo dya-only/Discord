@@ -70,7 +70,7 @@ export class EventsController {
   @Get('room/:roomKey')
   public async findRoomByKey(@Param('roomKey') roomKey: string) {
     return {
-      sucess: true,
+      success: true,
       body: await this.eventsService.findRoomByKey(roomKey)
     }
   }

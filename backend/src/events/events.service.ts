@@ -80,10 +80,18 @@ export class EventsService {
       name: createRoomDto.name,
       ownerId: userId,
       roomKey,
-      image: 'default.png',
+      image: 'default.png'
+    })
+
+    const room = await this.rooms.findOne({
+      where: { roomKey }
     })
 
     await this.joinRoom(userId, roomKey)
+    await this.createChannel({
+      roomId: room.id,
+      name: '일반'
+    })
   }
 
   public async joinRoom(userId: number, roomKey: string): Promise<void> {
@@ -106,7 +114,6 @@ export class EventsService {
     }
     
     user.rooms.push(room)
-    console.log(user)
     await this.users.save(user)
   }
 
@@ -114,7 +121,8 @@ export class EventsService {
     return await this.rooms.findOne({
       where: { roomKey },
       relations: {
-        users: true
+        users: true,
+        channels: true
       }
     }) ?? undefined
   }

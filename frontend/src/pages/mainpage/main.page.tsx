@@ -7,14 +7,49 @@ import Channel from "../../components/mainpage/channel.style"
 import Chat from "../../components/mainpage/chat.style"
 
 const MainPage = () => {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState({
+    id: 0,
+    avatar: '',
+    bio: '',
+    createdAt: '',
+    email: '',
+    login: '',
+    nickname: '',
+    rooms: []
+  })
+  const [channels, setChannels] = useState([])
+  const [current, setCurrent] = useState({
+    server: '',
+    channel: 0
+  })
 
-  const verify = () => {
+  const getChannels = async (roomKey: string) => {
+    axios.get(`/api/events/room/${roomKey}`)
+      .then((resp) => {
+        const res = resp.data
+        setChannels(res.body.channels)
+        setCurrent({ server: res.body.roomKey, channel: res.body.channels[0].id })
+        console.log(res.body)
+      })
+  }
+
+  const getUser = async (userId: number) => {
+    axios.get(`/api/users/${userId}`)
+      .then((resp) => {
+        const res = resp.data
+        console.log(user)
+        console.log(res.body.rooms)
+
+        getChannels(res.body.rooms[0].roomKey)
+        setUser(res.body)
+      })
+  }
+
+  const verify = async () => {
     axios.get('/api/auth/status')
       .then((resp) => {
         const res = resp.data
-        setUser(res.body.id)
-        console.log(user)
+        getUser(res.body.userId)
       })
       .catch(() => {
         window.location.href = '/login'
@@ -29,7 +64,7 @@ const MainPage = () => {
     <StyledMain>
       <div className={styles.panel}>
         <nav className={styles.nav}>
-          
+
           {/* DM Button */}
           <div className={styles.dmContainer}>
             <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#dbdee1" d="M19.73 4.87a18.2 18.2 0 0 0-4.6-1.44c-.21.4-.4.8-.58 1.21-1.69-.25-3.4-.25-5.1 0-.18-.41-.37-.82-.59-1.2-1.6.27-3.14.75-4.6 1.43A19.04 19.04 0 0 0 .96 17.7a18.43 18.43 0 0 0 5.63 2.87c.46-.62.86-1.28 1.2-1.98-.65-.25-1.29-.55-1.9-.92.17-.12.32-.24.47-.37 3.58 1.7 7.7 1.7 11.28 0l.46.37c-.6.36-1.25.67-1.9.92.35.7.75 1.35 1.2 1.98 2.03-.63 3.94-1.6 5.64-2.87.47-4.87-.78-9.09-3.3-12.83ZM8.3 15.12c-1.1 0-2-1.02-2-2.27 0-1.24.88-2.26 2-2.26s2.02 1.02 2 2.26c0 1.25-.89 2.27-2 2.27Zm7.4 0c-1.1 0-2-1.02-2-2.27 0-1.24.88-2.26 2-2.26s2.02 1.02 2 2.26c0 1.25-.88 2.27-2 2.27Z"></path></svg>
@@ -37,8 +72,13 @@ const MainPage = () => {
           <div className={styles.hr} />
 
           {/* Server Icons */}
-          <ServerIcon></ServerIcon>
-          <ServerIcon></ServerIcon>
+          { user.rooms.map((el: { name: string, image: string, roomKey: string }, idx) => ((
+            <ServerIcon key={idx} name={el.name} imageUrl={el.image} active={current.server === el.roomKey ? true : false}
+              onClick={() => {
+                setCurrent({ ...current, server: el.roomKey })
+                getChannels(el.roomKey)
+              }} />
+          ))) }
         </nav>
 
         {/* Channel Nav */}
@@ -47,7 +87,12 @@ const MainPage = () => {
           <header>
           </header>
 
-          <Channel name={'general'}></Channel>
+          {/* Channels */}
+          { channels.map((el: { name: string, id: number }, idx) => (
+            <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
+              onClick={() => setCurrent({ ...current, channel: el.id })} ></Channel>
+          ))
+          }
         </div>
       </div>
 

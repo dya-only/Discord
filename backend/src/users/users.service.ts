@@ -74,7 +74,7 @@ export class UsersService {
         salt: secret
       },
       relations: {
-        rooms: true
+        rooms: true,
       }
     }) ?? undefined
   }
