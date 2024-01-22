@@ -9,6 +9,8 @@ import { Chat } from './entities/chat.entity'
 import { Room } from './entities/room.entity'
 import { Channel } from './entities/channel.entity'
 import { User } from 'src/users/entities/user.entity'
+import { CreateChannelDto } from './dto/CreateChannelDto'
+import { UpdateChannelDto } from './dto/UpdateChannelDto'
 
 @Injectable()
 export class EventsService {
@@ -127,5 +129,26 @@ export class EventsService {
     
     user.rooms = user.rooms.filter((e) => e.id !== roomId)
     await this.users.save(user)
+  }
+
+
+  // ---
+
+
+  public async createChannel(createChannelDto: CreateChannelDto): Promise<void> {
+    await this.channels.insert({
+      name: createChannelDto.name,
+      roomId: createChannelDto.roomId
+    })
+  }
+
+  public async updateChannel(channelId: number, updateChannelDto: UpdateChannelDto): Promise<void> {
+    await this.channels.update(channelId, {
+      name: updateChannelDto.name
+    })
+  }
+
+  public async deleteChannel(channelId: number): Promise<void> {
+    await this.channels.delete(channelId)
   }
 }

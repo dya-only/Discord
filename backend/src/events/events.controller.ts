@@ -5,6 +5,8 @@ import { EventsService } from './events.service'
 import { CreateChatDto } from './dto/CreateChatDto'
 import { UpdateChatDto } from './dto/UpdateChatDto'
 import { CreateRoomDto } from './dto/CreateRoomDto'
+import { CreateChannelDto } from './dto/CreateChannelDto'
+import { UpdateChannelDto } from './dto/UpdateChannelDto'
 
 @Controller('events')
 @UseGuards(AuthGuard)
@@ -87,6 +89,37 @@ export class EventsController {
   public async leaveRoom(@Res({ passthrough: true }) res: Response, @Param('roomId') roomId: number) {
     const userId = res.locals.userId
     await this.eventsService.leaveRoom(userId, roomId)
+
+    return {
+      success: true
+    }
+  }
+
+
+  // ---
+
+
+  @Post('channel')
+  public async createChannel(@Body() createChannelDto: CreateChannelDto) {
+    await this.eventsService.createChannel(createChannelDto)
+
+    return {
+      success: true
+    }
+  }
+
+  @Patch('channel/:channelId')
+  public async updateChannel(@Param('channelId') channelId: number, @Body() updateChannelDto: UpdateChannelDto) {
+    await this.eventsService.updateChannel(channelId, updateChannelDto)
+
+    return {
+      success: true
+    }
+  }
+
+  @Delete('channel/:channelId')
+  public async deleteChannel(@Param('channelId') channelId: number) {
+    await this.eventsService.deleteChannel(channelId)
 
     return {
       success: true
