@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import axios from "axios"
 import styles from './mainpage.module.css'
 import StyledMain from "../../components/mainpage/main.style"
 import ServerIcon from "../../components/mainpage/server.style"
 import Channel from "../../components/mainpage/channel.style"
 import Chat from "../../components/mainpage/chat.style"
+import { io } from "socket.io-client"
+
+interface MessageInterface {
+  msg: string,
+  joinKey: string,
+  userId: number
+}
 
 const MainPage = () => {
+  const [socket] = useState(() => io('http://localhost:3000'))
   const [user, setUser] = useState({
     id: 0,
     avatar: '',
@@ -22,14 +30,32 @@ const MainPage = () => {
     server: '',
     channel: 0
   })
+  const [joinKey, setJoinKey] = useState<string>('')
+  const [msg, setMsg] = useState<string>('')
+  const [chat, setChat] = useState<MessageInterface[]>([])
+
+  const sendMessage = (e: FormEvent) => {
+    e.preventDefault()
+
+    if (msg) {
+      socket.emit('sendMessage', { joinKey, msg, userId: user.id })
+
+      // axios.post('/api/events', {
+      //   channelId: current.channel,
+      //   message: msg
+      // }, { headers: { 'Content-Type': 'application/json' } })
+
+      setMsg('')
+    }
+  }
 
   const getChannels = async (roomKey: string) => {
     axios.get(`/api/events/room/${roomKey}`)
       .then((resp) => {
         const res = resp.data
+        console.log(res)
         setChannels(res.body.channels)
         setCurrent({ server: res.body.roomKey, channel: res.body.channels[0].id })
-        console.log(res.body)
       })
   }
 
@@ -37,9 +63,6 @@ const MainPage = () => {
     axios.get(`/api/users/${userId}`)
       .then((resp) => {
         const res = resp.data
-        console.log(user)
-        console.log(res.body.rooms)
-
         getChannels(res.body.rooms[0].roomKey)
         setUser(res.body)
       })
@@ -56,9 +79,31 @@ const MainPage = () => {
       })
   }
 
+  // Auth
   useEffect(() => {
     verify()
   }, [])
+
+  // Message Handler
+  useEffect(() => {
+    const handleMessage = (msg: MessageInterface) => {
+      setChat((prev: MessageInterface[]) => [...prev, msg])
+    }
+
+    socket.on('sendMessage', handleMessage)
+
+    return () => {
+      socket.off('sendMessage', handleMessage)
+    }
+  }, [socket])
+
+  // Current Change
+  useEffect(() => {
+    setJoinKey(`${current.server}/${current.channel}`)
+    socket.emit('joinChannel', `${current.server}/${current.channel}`)
+
+    setChat([])
+  }, [current, socket])
 
   return (
     <StyledMain>
@@ -72,13 +117,13 @@ const MainPage = () => {
           <div className={styles.hr} />
 
           {/* Server Icons */}
-          { user.rooms.map((el: { name: string, image: string, roomKey: string }, idx) => ((
+          {user.rooms.map((el: { name: string, image: string, roomKey: string }, idx) => ((
             <ServerIcon key={idx} name={el.name} imageUrl={el.image} active={current.server === el.roomKey ? true : false}
               onClick={() => {
                 setCurrent({ ...current, server: el.roomKey })
                 getChannels(el.roomKey)
               }} />
-          ))) }
+          )))}
         </nav>
 
         {/* Channel Nav */}
@@ -88,9 +133,11 @@ const MainPage = () => {
           </header>
 
           {/* Channels */}
-          { channels.map((el: { name: string, id: number }, idx) => (
+          {channels.map((el: { name: string, id: number }, idx) => (
             <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
-              onClick={() => setCurrent({ ...current, channel: el.id })} ></Channel>
+              onClick={() => {
+                setCurrent({ ...current, channel: el.id })
+              }} ></Channel>
           ))
           }
         </div>
@@ -102,18 +149,18 @@ const MainPage = () => {
 
       <div className={styles.chatContainer}>
         <div className={styles.ul}>
-          <Chat profile='../../assets/profile.png' nickname='Discord' message="ping!"></Chat>
-          <Chat profile='../../assets/profile.png' nickname='Discord' message="ping!"></Chat>
-          <Chat profile='../../assets/profile.png' nickname='Discord' message="ping!"></Chat>
+          {chat.map((msg: MessageInterface, idx) => (
+            msg.joinKey === joinKey ? ( idx > 0 && chat[idx - 1].userId === chat[idx].userId ? <Chat key={idx} userId={msg.userId} message={msg.msg} type={'mini'}></Chat> : <Chat key={idx} userId={msg.userId} message={msg.msg} type={'normal'}></Chat> ) : null
+          ))}
         </div>
 
-        <form action='' className={styles.form}>
+        <form action='' className={styles.form} onSubmit={sendMessage}>
           <div className={styles.bar}>
             <button className={styles.upload}>
               <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b5bac1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="transparent"></circle><path fill="var(--interactive-normal)" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm0-17a1 1 0 0 1 1 1v4h4a1 1 0 1 1 0 2h-4v4a1 1 0 1 1-2 0v-4H7a1 1 0 1 1 0-2h4V7a1 1 0 0 1 1-1Z" clipRule="evenodd"></path></svg>
             </button>
 
-            <input type="text" className={styles.input} placeholder="#general에 메시지 보내기" />
+            <input type="text" autoComplete='off' className={styles.input} placeholder={`#general에 메시지 보내기`} value={msg} onChange={(e: ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)} />
           </div>
         </form>
       </div>

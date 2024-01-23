@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsDate, IsInt, IsPositive, IsString, MaxLength } from 'class-validator'
 import { User } from 'src/users/entities/user.entity'
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Channel } from './channel.entity'
 
 @Entity({
@@ -32,29 +32,28 @@ export class Chat {
   public readonly createdAt: Date
 
   @Column({
-    name: 'user_id',
+    name: 'userId',
     type: 'int',
     unsigned: true,
     nullable: false
   })
+  @IsInt()
   @IsPositive()
   @ApiProperty()
   public readonly userId: number
 
   @Column({
-    name: 'channel_id',
+    name: 'channelId',
     type: 'int',
+    unsigned: true,
     nullable: false
   })
+  @IsInt()
   @IsPositive()
   @ApiProperty()
   public readonly channelId: number
 
-  @ManyToOne(() => User, (u) => u.chats, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    nullable: false
-  })
+  @OneToOne(() => User, { cascade: true })
   @JoinColumn({
     name: 'userId',
     referencedColumnName: 'id'

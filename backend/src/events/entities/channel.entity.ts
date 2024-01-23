@@ -10,7 +10,7 @@ import { Room } from './room.entity'
 export class Channel {
   @PrimaryGeneratedColumn('increment', {
     type: 'int',
-    unsigned: true
+    unsigned: true,
   })
   @IsInt()
   @IsPositive()

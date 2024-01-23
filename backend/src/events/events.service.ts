@@ -38,7 +38,10 @@ export class EventsService {
 
   public async findChat(channelId: number): Promise<Chat[]> {
     return await this.chats.find({
-      where: { channelId }
+      where: { channelId },
+      relations: {
+        user: true
+      }
     })
   }
 

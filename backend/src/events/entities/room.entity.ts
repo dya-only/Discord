@@ -24,7 +24,7 @@ export class Room {
   public readonly name: string
 
   @Column({
-    name: 'owner_id',
+    name: 'ownerId',
     type: 'int',
     unsigned: true
   })
@@ -34,7 +34,7 @@ export class Room {
   public readonly ownerId: number
 
   @Column({
-    name: 'room_key',
+    name: 'roomKey',
     unique: true
   })
   @IsString()
