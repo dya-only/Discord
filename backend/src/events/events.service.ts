@@ -33,15 +33,12 @@ export class EventsService {
       message: createChatDto.message,
       channelId: createChatDto.channelId,
       userId
-    })
+    }) 
   }
 
   public async findChat(channelId: number): Promise<Chat[]> {
     return await this.chats.find({
-      where: { channelId },
-      relations: {
-        user: true
-      }
+      where: { channelId }
     })
   }
 

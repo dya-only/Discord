@@ -12,6 +12,11 @@ interface MessageInterface {
   joinKey: string,
   userId: number
 }
+interface OldMessageInterface {
+  message: string,
+  channelId: number,
+  userId: number,
+}
 
 const MainPage = () => {
   const [socket] = useState(() => io('http://localhost:3000'))
@@ -30,32 +35,42 @@ const MainPage = () => {
     server: '',
     channel: 0
   })
+  const [serverName, setServerName] = useState<string>('')
   const [joinKey, setJoinKey] = useState<string>('')
   const [msg, setMsg] = useState<string>('')
   const [chat, setChat] = useState<MessageInterface[]>([])
+  const [oldChat, setOldChat] = useState<OldMessageInterface[]>([])
 
-  const sendMessage = (e: FormEvent) => {
+  const sendMessage = async (e: FormEvent) => {
     e.preventDefault()
 
     if (msg) {
       socket.emit('sendMessage', { joinKey, msg, userId: user.id })
 
-      // axios.post('/api/events', {
-      //   channelId: current.channel,
-      //   message: msg
-      // }, { headers: { 'Content-Type': 'application/json' } })
+      axios.post('/api/events', {
+        channelId: current.channel,
+        message: msg
+      }, { headers: { 'Content-Type': 'application/json' } })
 
       setMsg('')
     }
+  }
+
+  const getChats = async (channelId: number) => {
+    axios.get(`/api/events/${channelId}`)
+    .then((resp) => {
+      const res = resp.data
+      setOldChat(res.body)
+    })
   }
 
   const getChannels = async (roomKey: string) => {
     axios.get(`/api/events/room/${roomKey}`)
       .then((resp) => {
         const res = resp.data
-        console.log(res)
         setChannels(res.body.channels)
         setCurrent({ server: res.body.roomKey, channel: res.body.channels[0].id })
+        getChats(res.body.id)
       })
   }
 
@@ -63,8 +78,10 @@ const MainPage = () => {
     axios.get(`/api/users/${userId}`)
       .then((resp) => {
         const res = resp.data
-        getChannels(res.body.rooms[0].roomKey)
         setUser(res.body)
+        getChannels(res.body.rooms[0].roomKey)
+        setServerName(res.body.rooms[0].name)
+        console.log(res.body.rooms)
       })
   }
 
@@ -102,6 +119,7 @@ const MainPage = () => {
     setJoinKey(`${current.server}/${current.channel}`)
     socket.emit('joinChannel', `${current.server}/${current.channel}`)
 
+    getChats(current.channel)
     setChat([])
   }, [current, socket])
 
@@ -130,6 +148,7 @@ const MainPage = () => {
         <div className={styles.channelNav}>
           {/* Channel Headers */}
           <header>
+            <div className={styles.serverName}>{ serverName }</div>
           </header>
 
           {/* Channels */}
@@ -147,8 +166,13 @@ const MainPage = () => {
       <header className={styles.serverHeader}>
       </header>
 
+      {/* Chats */}
       <div className={styles.chatContainer}>
         <div className={styles.ul}>
+          {oldChat.map((el: OldMessageInterface, idx) => (
+            idx > 0 && oldChat[idx - 1].userId === oldChat[idx].userId ? <Chat key={idx} userId={el.userId} message={el.message} type={'mini'}></Chat> : <Chat key={idx} userId={el.userId} message={el.message} type={'normal'}></Chat>
+          ))}
+
           {chat.map((msg: MessageInterface, idx) => (
             msg.joinKey === joinKey ? ( idx > 0 && chat[idx - 1].userId === chat[idx].userId ? <Chat key={idx} userId={msg.userId} message={msg.msg} type={'mini'}></Chat> : <Chat key={idx} userId={msg.userId} message={msg.msg} type={'normal'}></Chat> ) : null
           ))}

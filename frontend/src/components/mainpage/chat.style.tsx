@@ -20,7 +20,7 @@ const Chat = (props: { userId: number, message: string, type: string }) => {
         const res = resp.data
         setUser(res.body)
       })
-    }  
+    }
 
     getUser()
   }, [])
@@ -80,6 +80,5 @@ const StyledMiniChat = styled.div`
     background: #2f3035;
   }
 `
-
 
 export default Chat

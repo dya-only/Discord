@@ -1,13 +1,8 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
-import { UsersService } from 'src/users/users.service'
 
 @WebSocketGateway({ cors: true })
 export class EventsGateway {
-  constructor (
-    private usersService: UsersService
-  ) {}
-
   @WebSocketServer()
   server: Server
 
@@ -23,7 +18,7 @@ export class EventsGateway {
     this.server.to(message.joinKey).emit('sendMessage', {
       joinKey: message.joinKey,
       msg: message.msg,
-      user: await this.usersService.findUser(message.userId) 
+      userId: message.userId 
     })
   }
 }
