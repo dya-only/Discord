@@ -90,15 +90,27 @@
 }
 
 .ul {
-  display: flex;
-  flex-direction: column;
+  margin-right: 5px;
+  padding-top: 100px;
   padding-bottom: 16px;
   overflow-y: scroll;
   overflow-x: hidden;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
 }
-.ul::-webkit-scrollbar {
+/* .ul::-webkit-scrollbar {
   display: none;
+} */
+.ul::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ul::-webkit-scrollbar-thumb {
+    background: #1a1b1e; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+.ul::-webkit-scrollbar-track {
+    background: #2c2d30;  /*스크롤바 뒷 배경 색상*/
 }
 
 .form {
@@ -155,5 +167,4 @@
 
 .infinite {
   height: 100px;
-  margin-top: 300px;
 }

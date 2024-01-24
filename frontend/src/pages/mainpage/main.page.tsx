@@ -7,6 +7,7 @@ import Channel from "../../components/mainpage/channel.style"
 import Chat from "../../components/mainpage/chat.style"
 import { io } from "socket.io-client"
 import { useInView } from 'react-intersection-observer'
+import StartMenu from "../../components/mainpage/start.style"
 // import ScrollToBottom from 'react-scroll-to-bottom'
 
 interface MessageInterface {
@@ -78,11 +79,12 @@ const MainPage = () => {
       const res = resp.data
       res.body.map((el: OldMessageInterface) => {
         oldChat.unshift(el)
+        // if (scrollRef.current) scrollRef.current.scrollTo({ behavior: 'smooth' })
+        if (scrollRef.current) scrollRef.current.scrollTop += 10
       })
-
-      // if (scrollRef.current) scrollRef.current.scrollTop += 200
       setNext(res.next)
     })
+
   }
 
   const getChannels = async (roomKey: string) => {
@@ -153,7 +155,7 @@ const MainPage = () => {
     if (inView) {
       getChats(current.channel)
 
-      if (scrollRef.current) scrollRef.current.scrollTop += 200
+      // if (scrollRef.current) scrollRef.current.scrollTop += 200
     }
   }, [inView]) 
 
@@ -203,6 +205,9 @@ const MainPage = () => {
       {/* Chats */}
       <div className={styles.chatContainer}>
         <div className={styles.ul} ref={scrollRef}>
+          {/* Chat Start Menu */}
+          <StartMenu name={serverName} />
+
           <div className={styles.infinite} ref={view}></div>
 
           {oldChat.map((el: OldMessageInterface, idx) => (
