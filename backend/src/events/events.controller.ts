@@ -25,11 +25,12 @@ export class EventsController {
     }
   }
 
-  @Get(':channelId')
-  public async findChat(@Param('channelId') channelId: number) {
+  @Get('chat/:channelId/:page')
+  public async findChat(@Param('channelId') channelId: number, @Param('page') page: number) {
     return {
       success: true,
-      body: await this.eventsService.findChat(channelId)
+      body: await this.eventsService.findChat(channelId, page),
+      next: page + 1
     }
   }
 

@@ -36,10 +36,13 @@ export class EventsService {
     }) 
   }
 
-  public async findChat(channelId: number): Promise<Chat[]> {
-    return await this.chats.find({
-      where: { channelId }
-    })
+  public async findChat(channelId: number, page: number): Promise<Chat[]> {
+    return (await this.chats.find({
+      where: { channelId },
+      skip: page * 50,
+      take: 50,
+      order: { id: 'DESC' }
+    }))
   }
 
   public async updateChat(userId: number, chatId: number, updateChatDto: UpdateChatDto): Promise<void> {

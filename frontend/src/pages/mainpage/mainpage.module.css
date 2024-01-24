@@ -89,12 +89,24 @@
   flex-grow: 1;
 }
 
+.ul {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.ul::-webkit-scrollbar {
+  display: none;
+}
+
 .form {
   animation: none;
   box-shadow: none;
   /* width: 100%; */
   padding: 0;
-  margin: 24px 8px;
+  margin: 0 8px 24px 8px;
   display: flex;
   justify-content: center;
 }
@@ -139,4 +151,9 @@
 
 .panel {
   display: flex;
+}
+
+.infinite {
+  height: 100px;
+  margin-top: 300px;
 }

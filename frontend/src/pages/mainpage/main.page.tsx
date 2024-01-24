@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react"
 import axios from "axios"
 import styles from './mainpage.module.css'
 import StyledMain from "../../components/mainpage/main.style"
@@ -6,6 +6,8 @@ import ServerIcon from "../../components/mainpage/server.style"
 import Channel from "../../components/mainpage/channel.style"
 import Chat from "../../components/mainpage/chat.style"
 import { io } from "socket.io-client"
+import { useInView } from 'react-intersection-observer'
+// import ScrollToBottom from 'react-scroll-to-bottom'
 
 interface MessageInterface {
   msg: string,
@@ -40,27 +42,46 @@ const MainPage = () => {
   const [msg, setMsg] = useState<string>('')
   const [chat, setChat] = useState<MessageInterface[]>([])
   const [oldChat, setOldChat] = useState<OldMessageInterface[]>([])
+  const [next, setNext] = useState<number>(1)
+  
+  const [view, inView] = useInView()
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault()
 
     if (msg) {
       socket.emit('sendMessage', { joinKey, msg, userId: user.id })
-
+      
       axios.post('/api/events', {
         channelId: current.channel,
         message: msg
       }, { headers: { 'Content-Type': 'application/json' } })
-
+      
       setMsg('')
+      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
     }
   }
 
-  const getChats = async (channelId: number) => {
-    axios.get(`/api/events/${channelId}`)
+  const initChat = async (channelId: number) => {
+    axios.get(`/api/events/chat/${channelId}/0`)
     .then((resp) => {
       const res = resp.data
       setOldChat(res.body)
+      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
+    })
+  }
+
+  const getChats = async (channelId: number) => {
+    axios.get(`/api/events/chat/${channelId}/${next}`)
+    .then((resp) => {
+      const res = resp.data
+      res.body.map((el: OldMessageInterface) => {
+        oldChat.unshift(el)
+      })
+
+      // if (scrollRef.current) scrollRef.current.scrollTop += 200
+      setNext(res.next)
     })
   }
 
@@ -70,7 +91,9 @@ const MainPage = () => {
         const res = resp.data
         setChannels(res.body.channels)
         setCurrent({ server: res.body.roomKey, channel: res.body.channels[0].id })
-        getChats(res.body.id)
+
+        setNext(1)
+        initChat(res.body.id)
       })
   }
 
@@ -81,7 +104,6 @@ const MainPage = () => {
         setUser(res.body)
         getChannels(res.body.rooms[0].roomKey)
         setServerName(res.body.rooms[0].name)
-        console.log(res.body.rooms)
       })
   }
 
@@ -119,9 +141,21 @@ const MainPage = () => {
     setJoinKey(`${current.server}/${current.channel}`)
     socket.emit('joinChannel', `${current.server}/${current.channel}`)
 
-    getChats(current.channel)
+    setNext(1)
+    initChat(current.channel)
     setChat([])
+
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
   }, [current, socket])
+
+  // Chat Infinite Pagination
+  useEffect(() => {
+    if (inView) {
+      getChats(current.channel)
+
+      if (scrollRef.current) scrollRef.current.scrollTop += 200
+    }
+  }, [inView]) 
 
   return (
     <StyledMain>
@@ -168,7 +202,9 @@ const MainPage = () => {
 
       {/* Chats */}
       <div className={styles.chatContainer}>
-        <div className={styles.ul}>
+        <div className={styles.ul} ref={scrollRef}>
+          <div className={styles.infinite} ref={view}></div>
+
           {oldChat.map((el: OldMessageInterface, idx) => (
             idx > 0 && oldChat[idx - 1].userId === oldChat[idx].userId ? <Chat key={idx} userId={el.userId} message={el.message} type={'mini'}></Chat> : <Chat key={idx} userId={el.userId} message={el.message} type={'normal'}></Chat>
           ))}
