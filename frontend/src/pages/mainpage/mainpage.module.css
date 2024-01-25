@@ -169,3 +169,263 @@
 .infinite {
   height: 100px;
 }
+
+.createServer {
+  width: 48px;
+  height: 48px;
+  background: rgb(49, 51, 56);
+  color: rgb(35, 165, 89);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  transition: all .3s;
+}
+.createServer:hover {
+  cursor: pointer;
+  color: white;
+  background: rgb(35, 165, 89);
+  border-radius: 16px;
+  transition: all .3s;
+}
+
+.windowBG {
+  position: fixed;
+  z-index: 900;
+  width: 200vw;
+  height: 200vh;
+  backdrop-filter: brightness(15%);
+  animation: FadeBrightness;
+  animation-timing-function: ease;;
+  animation-duration: .6s;
+}
+@keyframes FadeBrightness {
+  from {
+    opacity: 0;
+  } 
+  to {
+    opacity: 1;
+  }
+}
+
+.windowContainer {
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: Fade;
+  animation-timing-function: ease;;
+  animation-duration: .4s;
+}
+@keyframes Fade {
+  0% {
+    scale: 50%;
+  }
+  60% {
+    scale: 103%;
+  } 
+  100% {
+    scale: 100%;
+  }
+}
+
+.window {
+  z-index: 1100;
+  width: 440px;
+  height: 558px;
+  border-radius: 5px;
+  background: rgb(49, 51, 56);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all .3s;
+}
+
+.windowInvite {
+  z-index: 1100;
+  width: 440px;
+  height: 436px;
+  border-radius: 5px;
+  background: rgb(49, 51, 56);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all .3s;
+}
+
+.title {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.title > h1 {
+  color: rgb(242, 243, 245); 
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.title > div {
+  color: rgb(181, 186, 193);
+  font-size: 16px;
+  width: 400px;
+}
+
+.x {
+  position: absolute;
+  margin-top: 14px;
+  margin-left: 390px;
+  font-size: 14px;
+  color: rgb(106, 109, 112);
+  transition: color .3s;
+}
+.x:hover {
+  cursor: pointer;
+  color: white;
+  transition: color .3s;
+}
+
+.createBtns {
+  height: 330px;
+}
+
+.windowBtn {
+  width: 403px;
+  height: 64px;
+  background: rgb(49, 51, 56);
+  border: solid 1px rgba(78, 80, 88, 0.48);
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+}
+.windowBtn:hover {
+  background: #3b3c41; 
+}
+
+.windowBtn > div {
+  color: rgb(219, 222, 225);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btnLogo {
+  width: 48px;
+  height: 48px;
+  margin-left: 10px;
+  margin-right: 8px;
+}
+
+.arrowLogo {
+  width: 20px;
+  height: 20px;
+  margin-left: 210px;
+}
+
+.inviteContainer {
+  width: 100%;
+  height: 102px;
+  background: rgb(43, 45, 49);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  text-align: center;
+}
+
+.inviteContainer > h2 {
+  color: rgb(242, 243, 245);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.inviteContainer > button {
+  background: rgb(78, 80, 88);
+  color: white;
+  width: 415px;
+  height: 34px;
+  border-radius: 5px;
+  padding: 2px 0;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.inviteContainer > button:hover {
+  background: #6e6f77;
+}
+
+.linkContainer {
+  width: 410px;
+  height: 254px;
+}
+
+.label {
+  color: rgb(181, 186, 193);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.label > span {
+  color: red;
+}
+
+.gap {
+  height: 20px;
+}
+
+.inviteEx {
+  color: rgb(242, 243, 245);
+  font-size: 13px;
+}
+
+.inviteContainer2 {
+  width: 408px;
+  height: 38px;
+  padding: 16px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: rgb(43, 45, 49);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inviteContainer2 > div {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.inviteContainer2 > button {
+  cursor: pointer;
+  background: rgb(88, 101, 242);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  height: 34px;
+  padding: 19px 16px;
+  border-radius: 3px;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  transition: background .2s;
+
+  &:hover {
+    background: #5354bd;
+    transition: background .2s;
+  }
+}

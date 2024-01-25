@@ -8,7 +8,10 @@ import Chat from "../../components/mainpage/chat.style"
 import { io } from "socket.io-client"
 import { useInView } from 'react-intersection-observer'
 import StartMenu from "../../components/mainpage/start.style"
-// import ScrollToBottom from 'react-scroll-to-bottom'
+
+import CreateServerSVG from '../../assets/imgs/create_server.svg'
+import ArrowSVG from '../../assets/imgs/arrow.svg'
+import StyledInput from "../../components/mainpage/input.style"
 
 interface MessageInterface {
   msg: string,
@@ -44,46 +47,57 @@ const MainPage = () => {
   const [chat, setChat] = useState<MessageInterface[]>([])
   const [oldChat, setOldChat] = useState<OldMessageInterface[]>([])
   const [next, setNext] = useState<number>(1)
-  
+  const [isServerWindow, setIsServerWindow] = useState<boolean>(false)
+  const [inviteStep, setInviteStep] = useState<number>(0)
+  const [inviteCode, setInviteCode] = useState<string>()
+
   const [view, inView] = useInView()
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const joinServer = async () => {
+    axios.get(`/api/events/room/join/${inviteCode}`)
+    .then((resp) => {
+      const res = resp.data
+      console.log(res)
+    })
+
+    window.location.href = '/'
+  }
 
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault()
 
     if (msg) {
       socket.emit('sendMessage', { joinKey, msg, userId: user.id })
-      
+
       axios.post('/api/events', {
         channelId: current.channel,
         message: msg
       }, { headers: { 'Content-Type': 'application/json' } })
-      
+
       setMsg('')
-      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
+      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }
 
   const initChat = async (channelId: number) => {
     axios.get(`/api/events/chat/${channelId}/0`)
-    .then((resp) => {
-      const res = resp.data
-      setOldChat(res.body.reverse()) 
-      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
-    })
+      .then((resp) => {
+        const res = resp.data
+        setOldChat(res.body.reverse())
+      })
   }
 
   const getChats = async (channelId: number) => {
     axios.get(`/api/events/chat/${channelId}/${next}`)
-    .then((resp) => {
-      const res = resp.data
-      res.body.map((el: OldMessageInterface) => {
-        oldChat.unshift(el)
-        if (scrollRef.current) scrollRef.current.scrollTop += 50
+      .then((resp) => {
+        const res = resp.data
+        res.body.map((el: OldMessageInterface) => {
+          oldChat.unshift(el)
+          if (scrollRef.current) scrollRef.current.scrollTop += 50
+        })
+        setNext(res.next)
       })
-      setNext(res.next)
-    })
-
   }
 
   const getChannels = async (roomKey: string) => {
@@ -105,8 +119,12 @@ const MainPage = () => {
         setUser(res.body)
         getChannels(res.body.rooms[0].roomKey)
         setServerName(res.body.rooms[0].name)
-        console.log(res.body.rooms[0])
+        console.log(res.body.rooms)
       })
+  }
+
+  const getServerInfo = async (roomKey: string) => {
+    return (await axios.get(`/api/events/room/${roomKey}`)).data.body
   }
 
   const verify = async () => {
@@ -130,7 +148,7 @@ const MainPage = () => {
     const handleMessage = (msg: MessageInterface) => {
       setChat((prev: MessageInterface[]) => [...prev, msg])
     }
-    
+
     socket.on('sendMessage', handleMessage)
 
     return () => {
@@ -147,7 +165,11 @@ const MainPage = () => {
     initChat(current.channel)
     setChat([])
 
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
+    const serverSets = async () => {
+      const server = await getServerInfo(current.server)
+      setServerName(server.name)
+    }
+    serverSets()
   }, [current, socket])
 
   // Chat Infinite Pagination
@@ -155,15 +177,71 @@ const MainPage = () => {
     if (inView) {
       getChats(current.channel)
     }
-  }, [inView]) 
+  }, [inView])
 
   // If Chat is Updated
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [chat])
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+  }, [oldChat])
 
   return (
     <StyledMain>
+      {isServerWindow ?
+        (!inviteStep ? <div className={styles.windowContainer}>
+          {isServerWindow ? <div className={styles.windowBG} onClick={() => setIsServerWindow(false)}></div> : null}
+          <div className={styles.window}>
+            <svg className={styles.x} onClick={() => setIsServerWindow(false)} aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+
+            <div className={styles.title}>
+              <h1>서버를 만들어보세요!</h1>
+              <div>서버는 나와 친구들이 함께 어울리는 공간입니다. 내 서버를 만들고 대화를 시작해보세요.</div>
+            </div>
+
+            <div className={styles.createBtns}>
+              <button className={styles.windowBtn}>
+                <img className={styles.btnLogo} src={CreateServerSVG} alt="" />
+                <div>직접 만들기</div>
+                <img className={styles.arrowLogo} src={ArrowSVG} alt="" />
+              </button>
+            </div>
+
+            <div className={styles.inviteContainer}>
+              <h2>이미 초대장을 받으셨나요?</h2>
+              <button onClick={() => setInviteStep(1)}>서버 참가하기</button>
+            </div>
+          </div>
+        </div>
+        : <div className={styles.windowContainer}>
+          {isServerWindow ? <div className={styles.windowBG} onClick={() => { setIsServerWindow(false); setInviteStep(0) }}></div> : null}
+          <div className={styles.windowInvite}>
+            <svg className={styles.x} onClick={() => { setIsServerWindow(false); setInviteStep(0) }} aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+
+            <div className={styles.title}>
+              <h1>서버 참가하기</h1>
+              <div>아래에 초대 코드를 입력하여 서버에 참가하세요.</div>
+            </div>
+
+            <div className={styles.linkContainer}>
+              <div className={styles.label}>초대 링크 <span>*</span></div>
+              <StyledInput type={'text'} placeholder={'Pi4qfVJrLU3'} onChange={(e: ChangeEvent<HTMLInputElement>) => setInviteCode(e.target.value)} />
+
+              <div className={styles.gap}></div>
+
+              <div className={styles.label}>초대는 다음 형태여야 해요.</div>
+              <div className={styles.inviteEx}>Pi4qfVJrLU3</div>
+            </div>
+
+            <div className={styles.inviteContainer2}>
+              <div onClick={() => setInviteStep(0)}>뒤로 가기</div>
+              <button onClick={joinServer}>서버 참가하기</button>
+            </div>
+          </div>
+        </div>)
+      : null}
+
       <div className={styles.panel}>
         <nav className={styles.nav}>
 
@@ -181,13 +259,18 @@ const MainPage = () => {
                 getChannels(el.roomKey)
               }} />
           )))}
+
+          {/* Create Server Button */}
+          <div className={styles.createServer} onClick={() => setIsServerWindow(true)}>
+            <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 5a1 1 0 1 0-2 0v6H5a1 1 0 1 0 0 2h6v6a1 1 0 1 0 2 0v-6h6a1 1 0 1 0 0-2h-6V5Z"></path></svg>
+          </div>
         </nav>
 
         {/* Channel Nav */}
         <div className={styles.channelNav}>
           {/* Channel Headers */}
           <header>
-            <div className={styles.serverName}>{ serverName }</div>
+            <div className={styles.serverName}>{serverName}</div>
           </header>
 
           {/* Channels */}
@@ -208,8 +291,10 @@ const MainPage = () => {
       {/* Chats */}
       <div className={styles.chatContainer}>
         <div className={styles.ul} ref={scrollRef}>
-          {/* Chat Start Menu */}
-          <StartMenu name={serverName} />
+          {/* Channel Start Menu */}
+          { user.rooms.length ? 
+            <StartMenu name={serverName} />
+          : <div>서버에 참여해봐요!</div> }
 
           <div className={styles.infinite} ref={view}></div>
 
@@ -218,19 +303,21 @@ const MainPage = () => {
           ))}
 
           {chat.map((msg: MessageInterface, idx) => (
-            msg.joinKey === joinKey ? ( idx > 0 && chat[idx - 1].userId === chat[idx].userId ? <Chat key={idx} userId={msg.userId} message={msg.msg} type={'mini'}></Chat> : <Chat key={idx} userId={msg.userId} message={msg.msg} type={'normal'}></Chat> ) : null
+            msg.joinKey === joinKey ? (idx > 0 && chat[idx - 1].userId === chat[idx].userId ? <Chat key={idx} userId={msg.userId} message={msg.msg} type={'mini'}></Chat> : <Chat key={idx} userId={msg.userId} message={msg.msg} type={'normal'}></Chat>) : null
           ))}
         </div>
+        
+        { user.rooms.length ?
+          <form action='' className={styles.form} onSubmit={sendMessage}>
+            <div className={styles.bar}>
+              <button className={styles.upload}>
+                <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b5bac1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="transparent"></circle><path fill="var(--interactive-normal)" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm0-17a1 1 0 0 1 1 1v4h4a1 1 0 1 1 0 2h-4v4a1 1 0 1 1-2 0v-4H7a1 1 0 1 1 0-2h4V7a1 1 0 0 1 1-1Z" clipRule="evenodd"></path></svg>
+              </button>
 
-        <form action='' className={styles.form} onSubmit={sendMessage}>
-          <div className={styles.bar}>
-            <button className={styles.upload}>
-              <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b5bac1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="transparent"></circle><path fill="var(--interactive-normal)" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm0-17a1 1 0 0 1 1 1v4h4a1 1 0 1 1 0 2h-4v4a1 1 0 1 1-2 0v-4H7a1 1 0 1 1 0-2h4V7a1 1 0 0 1 1-1Z" clipRule="evenodd"></path></svg>
-            </button>
-
-            <input type="text" autoComplete='off' className={styles.input} placeholder={`#general에 메시지 보내기`} value={msg} onChange={(e: ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)} />
-          </div>
-        </form>
+              <input type="text" autoComplete='off' className={styles.input} placeholder={`#general에 메시지 보내기`} value={msg} onChange={(e: ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)} />
+            </div>
+          </form>
+        : null }
       </div>
 
       <aside className={styles.aside}></aside>

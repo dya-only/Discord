@@ -47,7 +47,7 @@ const fade = keyframes`
 `
 
 const StyledChat = styled.div`
-  padding: 12px 0 4px 12px;
+  padding: 12px 0 4px 24px;
   display: flex;
   align-items: center;
   flex-grow: 1;
@@ -77,7 +77,7 @@ const StyledChat = styled.div`
 `
 
 const StyledMiniChat = styled.div`
-  padding: 4px 12px 4px 67px;
+  padding: 4px 12px 4px 79px;
   color: white;
   display: flex; 
   flex-grow: 1;
