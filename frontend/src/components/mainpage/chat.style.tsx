@@ -47,11 +47,12 @@ const fade = keyframes`
 `
 
 const StyledChat = styled.div`
-  width: 100%;
   padding: 12px 0 4px 12px;
   display: flex;
   align-items: center;
+  flex-grow: 1;
   color: white;
+  word-break: break-all;
   animation: ${fade} 0.3s ease 1;
 
   &:hover {
@@ -59,6 +60,8 @@ const StyledChat = styled.div`
   }
 
   .profile {
+    min-width: 40px;
+    min-height: 40px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -67,14 +70,19 @@ const StyledChat = styled.div`
     object-fit: cover;
     cursor: pointer;
   }
+
+  .message {
+    word-break: break-all;
+  }
 `
 
 const StyledMiniChat = styled.div`
-  width: 100%;
   padding: 4px 12px 4px 67px;
   color: white;
+  display: flex; 
+  flex-grow: 1;
+  word-break: break-all;
   animation: ${fade} 0.3s ease 1;
-
 
   &:hover {
     background: #2f3035;

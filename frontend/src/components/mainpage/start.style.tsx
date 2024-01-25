@@ -5,7 +5,7 @@ const StartMenu = (props: { name: string }) => {
   return ( 
     <StyledStart>
       <h1>{ props.name }에<br/>오신 것을 환영합니다</h1>
-      <div className='info'>새로운 서버에 오신 것을 환영해요. 처음에 알아두면좋을 몇 가지를 알려 드릴게요! 자세한 정보는 시작하기 가이드를 확인해보세요.</div>
+      <div className='info'>새로운 서버에 오신 것을 환영해요. 처음에 알아두면 좋을 몇 가지를 알려 드릴게요! 자세한 정보는 시작하기 가이드를 확인해보세요.</div>
       <img src={Start} alt="" />
     </StyledStart>
   )

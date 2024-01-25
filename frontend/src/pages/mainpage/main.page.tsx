@@ -68,7 +68,7 @@ const MainPage = () => {
     axios.get(`/api/events/chat/${channelId}/0`)
     .then((resp) => {
       const res = resp.data
-      setOldChat(res.body)
+      setOldChat(res.body.reverse()) 
       if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
     })
   }
@@ -79,8 +79,7 @@ const MainPage = () => {
       const res = resp.data
       res.body.map((el: OldMessageInterface) => {
         oldChat.unshift(el)
-        // if (scrollRef.current) scrollRef.current.scrollTo({ behavior: 'smooth' })
-        if (scrollRef.current) scrollRef.current.scrollTop += 10
+        if (scrollRef.current) scrollRef.current.scrollTop += 50
       })
       setNext(res.next)
     })
@@ -106,6 +105,7 @@ const MainPage = () => {
         setUser(res.body)
         getChannels(res.body.rooms[0].roomKey)
         setServerName(res.body.rooms[0].name)
+        console.log(res.body.rooms[0])
       })
   }
 
@@ -130,7 +130,7 @@ const MainPage = () => {
     const handleMessage = (msg: MessageInterface) => {
       setChat((prev: MessageInterface[]) => [...prev, msg])
     }
-
+    
     socket.on('sendMessage', handleMessage)
 
     return () => {
@@ -154,10 +154,13 @@ const MainPage = () => {
   useEffect(() => {
     if (inView) {
       getChats(current.channel)
-
-      // if (scrollRef.current) scrollRef.current.scrollTop += 200
     }
   }, [inView]) 
+
+  // If Chat is Updated
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight 
+  }, [chat])
 
   return (
     <StyledMain>
