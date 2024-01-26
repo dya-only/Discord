@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { Response } from 'express'
 import { AuthGuard } from 'src/auth/auth.guard'
 import { EventsService } from './events.service'
@@ -7,8 +7,12 @@ import { UpdateChatDto } from './dto/UpdateChatDto'
 import { CreateRoomDto } from './dto/CreateRoomDto'
 import { CreateChannelDto } from './dto/CreateChannelDto'
 import { UpdateChannelDto } from './dto/UpdateChannelDto'
+import { ApiTags } from '@nestjs/swagger'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { UploadImageDto } from './dto/UploadImageDto'
 
 @Controller('events')
+@ApiTags('Events')
 @UseGuards(AuthGuard)
 export class EventsController {
   constructor (
@@ -19,6 +23,21 @@ export class EventsController {
   public async createChat(@Res({ passthrough: true }) res: Response, @Body() createChatDto: CreateChatDto) {
     const userId = res.locals.userId
     await this.eventsService.createChat(userId, createChatDto)
+
+    return {
+      success: true
+    }
+  }
+
+  @Post('image')
+  @UseInterceptors(FileInterceptor('image'))
+  public async uploadImage(
+    @UploadedFile() image: Express.Multer.File,
+    @Res({ passthrough: true }) res: Response,
+    @Body() uploadImageDto: UploadImageDto
+  ) {
+    const userId = res.locals.userId
+    await this.eventsService.uploadImage(userId, uploadImageDto, image.filename)
 
     return {
       success: true
@@ -59,9 +78,14 @@ export class EventsController {
 
 
   @Post('room')
-  public async createRoom(@Res({ passthrough: true }) res: Response, @Body() createRoomDto: CreateRoomDto) {
+  @UseInterceptors(FileInterceptor('logo'))
+  public async createRoom(
+    @UploadedFile() logo: Express.Multer.File,
+    @Res({ passthrough: true }) res: Response,
+    @Body() createRoomDto: CreateRoomDto
+  ) {
     const userId = res.locals.userId
-    await this.eventsService.createRoom(userId, createRoomDto)
+    await this.eventsService.createRoom(userId, createRoomDto, logo.filename)
 
     return {
       success: true

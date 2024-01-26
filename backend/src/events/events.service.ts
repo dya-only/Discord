@@ -11,6 +11,7 @@ import { Channel } from './entities/channel.entity'
 import { User } from 'src/users/entities/user.entity'
 import { CreateChannelDto } from './dto/CreateChannelDto'
 import { UpdateChannelDto } from './dto/UpdateChannelDto'
+import { UploadImageDto } from './dto/UploadImageDto'
 
 @Injectable()
 export class EventsService {
@@ -34,6 +35,14 @@ export class EventsService {
       channelId: createChatDto.channelId,
       userId
     }) 
+  }
+
+  public async uploadImage(userId: number, uploadImageDto: UploadImageDto, filename: string): Promise<void> {
+    await this.chats.insert({
+      message: `<<<[!img ${filename}`,   // Image prefix: <<<[!img
+      channelId: uploadImageDto.channelId,
+      userId
+    })
   }
 
   public async findChat(channelId: number, page: number): Promise<Chat[]> {
@@ -75,7 +84,7 @@ export class EventsService {
   // ---
 
 
-  public async createRoom(userId: number, createRoomDto: CreateRoomDto): Promise<void> {
+  public async createRoom(userId: number, createRoomDto: CreateRoomDto, filename: string): Promise<void> {
     let roomKey = url(small)
     if ((await this.rooms.findOne({ where: { roomKey } })) !== undefined) roomKey = url(small)  
 
@@ -83,7 +92,7 @@ export class EventsService {
       name: createRoomDto.name,
       ownerId: userId,
       roomKey,
-      image: 'default.png'
+      image: filename !== undefined ? filename : 'default.png'
     })
 
     const room = await this.rooms.findOne({

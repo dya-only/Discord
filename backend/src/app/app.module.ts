@@ -6,6 +6,7 @@ import { AuthModule } from 'src/auth/auth.module'
 import { UsersModule } from 'src/users/users.module'
 import { ConfigurationModule } from '../configuration/configuration.module'
 import { EventsModule } from 'src/events/events.module'
+import { FilesModule } from 'src/files/files.module'
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { EventsModule } from 'src/events/events.module'
     ConfigurationModule,
     UsersModule,
     AuthModule,
-    EventsModule
+    EventsModule,
+    FilesModule
   ]
 })
 export class AppModule implements NestModule {

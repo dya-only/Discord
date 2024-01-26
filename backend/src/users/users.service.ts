@@ -92,10 +92,14 @@ export class UsersService {
     }) ?? undefined
   }
 
-  public async updateUser (id: number, updateUserDto: UpdateUserDto): Promise<void> {
+  public async updateUser (id: number, updateUserDto: UpdateUserDto, filename: string): Promise<void> {
     await this.users.update(
       { id },
-      updateUserDto
+      {
+        bio: updateUserDto.bio,
+        nickname: updateUserDto.nickname,
+        avatar: filename !== undefined ? filename : 'default.png'
+      }
     )
   }
 

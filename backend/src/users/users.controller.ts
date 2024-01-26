@@ -1,10 +1,11 @@
-import { Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Res, UseGuards } from '@nestjs/common'
+import { Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/CreateUserDto'
 import { UpdateUserDto } from './dto/UpdateUserDto'
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/auth/auth.guard'
 import { Response } from 'express'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @ApiTags('users')
 @Controller('users')
@@ -67,10 +68,14 @@ export class UsersController {
   }
 
   @Patch(':userId')
+  @UseInterceptors(FileInterceptor('avatar'))
   @UseGuards(AuthGuard)
-  public async updateUser(@Param('userId') userId: number, @Body() updateUserDto: UpdateUserDto) {
+  public async updateUser(
+    @UploadedFile() avatar: Express.Multer.File,
+    @Param('userId') userId: number,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     const user = await this.usersService.findUser(userId)
-
     if (user === undefined) {
       throw new NotFoundException({
         success: false,
@@ -78,7 +83,7 @@ export class UsersController {
       })
     }
 
-    await this.usersService.updateUser(userId, updateUserDto)
+    await this.usersService.updateUser(userId, updateUserDto, avatar.filename)
 
     return {
       success: true

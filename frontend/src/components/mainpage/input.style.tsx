@@ -5,12 +5,13 @@ interface Props {
   className?: string
   type: string
   placeholder?: string
+  value?: string
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 class Element extends Component<Props, object> {
   render() {
-    return <input type={this.props.type} className={this.props.className} placeholder={this.props.placeholder} onChange={this.props.onChange} />
+    return <input type={this.props.type} className={this.props.className} placeholder={this.props.placeholder} value={this.props.value} onChange={this.props.onChange} />
   }
 }
 
