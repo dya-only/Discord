@@ -175,6 +175,11 @@
   flex-direction: column;
 }
 
+.aside_profile {
+  display: flex;
+  align-items: center;
+}
+
 .panel {
   display: flex;
 }

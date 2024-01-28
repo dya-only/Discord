@@ -12,6 +12,7 @@ import StartMenu from "../../components/mainpage/start.style"
 import CreateServerSVG from '../../assets/imgs/create_server.svg'
 import ArrowSVG from '../../assets/imgs/arrow.svg'
 import StyledInput from "../../components/mainpage/input.style"
+import Profile from "../../components/mainpage/profile.style"
 
 interface MessageInterface {
   msg: string,
@@ -41,6 +42,7 @@ const MainPage = () => {
     server: '',
     channel: 0
   })
+  const [joinUsers, setJoinUsers] = useState([])
   const [serverName, setServerName] = useState<string>('')
   const [joinKey, setJoinKey] = useState<string>('')
   const [msg, setMsg] = useState<string>('')
@@ -155,7 +157,10 @@ const MainPage = () => {
   }
 
   const getServerInfo = async (roomKey: string) => {
-    return (await axios.get(`/api/events/room/${roomKey}`)).data.body
+    const res = (await axios.get(`/api/events/room/${roomKey}`)).data.body
+    setJoinUsers(res.users)
+
+    return res
   }
 
   const verify = async () => {
@@ -383,7 +388,11 @@ const MainPage = () => {
           : null}
       </div>
 
-      <aside className={styles.aside}></aside>
+      <aside className={styles.aside}>
+        { joinUsers.map((el: { nickname: string, avatar: string }, idx) => (
+          <Profile key={idx} nickname={el.nickname} avatar={el.avatar} />
+        ))}
+      </aside>
     </StyledMain>
   )
 }
