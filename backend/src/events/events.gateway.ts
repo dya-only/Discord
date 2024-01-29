@@ -6,6 +6,16 @@ export class EventsGateway {
   @WebSocketServer()
   server: Server
 
+  // onConnection
+  handleConnection(client: Socket) {
+    console.log(`client connected: ${client.id}`)
+  }
+
+  // onDisconnect
+  handleDisconnect(client: Socket) {
+    console.log(`client disconnected: ${client.id}`)
+  }
+
   @SubscribeMessage('joinChannel')
   handleJoinRoom(@MessageBody() joinKey: string, @ConnectedSocket() client: Socket) {
     console.log(`${joinKey} channel joined.`)
@@ -18,7 +28,7 @@ export class EventsGateway {
     this.server.to(message.joinKey).emit('sendMessage', {
       joinKey: message.joinKey,
       msg: message.msg,
-      userId: message.userId 
+      userId: message.userId
     })
   }
 }

@@ -12,9 +12,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly users: Repository<User>
-  ) {}
+  ) { }
 
-  public async createUser (createUserDto: CreateUserDto): Promise<void> {
+  public async createUser(createUserDto: CreateUserDto): Promise<void> {
     const salt = randomBytes(4).toString('hex')
     const password = await this.hashPassword(createUserDto.password, salt)
 
@@ -24,20 +24,21 @@ export class UsersService {
       nickname: createUserDto.nickname,
       bio: createUserDto.bio,
       avatar: 'default.png',
+      status: 'online',
       password,
       salt
     })
   }
 
-  public async checkLoginClaim (login: string): Promise<boolean> {
+  public async checkLoginClaim(login: string): Promise<boolean> {
     return await this.findUserByLogin(login) !== undefined
   }
 
-  public async checkEmailClaim (email: string): Promise<boolean> {
+  public async checkEmailClaim(email: string): Promise<boolean> {
     return await this.findUserByEmail(email) !== undefined
   }
 
-  public async findUserByLogin (login: string, secret = false): Promise<User | undefined> {
+  public async findUserByLogin(login: string, secret = false): Promise<User | undefined> {
     return await this.users.findOne({
       where: { login },
       select: {
@@ -58,7 +59,7 @@ export class UsersService {
     }) ?? undefined
   }
 
-  public async findUserByEmail (email: string, secret = false): Promise<User | undefined> {
+  public async findUserByEmail(email: string, secret = false): Promise<User | undefined> {
     return await this.users.findOne({
       where: { email },
       select: {
@@ -79,11 +80,11 @@ export class UsersService {
     }) ?? undefined
   }
 
-  public async findAllUser (): Promise<User[]> {
+  public async findAllUser(): Promise<User[]> {
     return await this.users.find()
   }
 
-  public async findUser (id: number): Promise<User | undefined> {
+  public async findUser(id: number): Promise<User | undefined> {
     return await this.users.findOne({
       where: { id },
       relations: {
@@ -92,18 +93,28 @@ export class UsersService {
     }) ?? undefined
   }
 
-  public async updateUser (id: number, updateUserDto: UpdateUserDto, filename: string): Promise<void> {
-    await this.users.update(
-      { id },
-      {
-        bio: updateUserDto.bio,
-        nickname: updateUserDto.nickname,
-        avatar: filename !== undefined ? filename : 'default.png'
-      }
+  public async updateUser(id: number, updateUserDto: UpdateUserDto, filename: string): Promise<void> {
+    await this.users.update(id, {
+      bio: updateUserDto.bio,
+      nickname: updateUserDto.nickname,
+      avatar: filename !== undefined ? filename : 'default.png'
+    }
     )
   }
 
-  public async hashPassword (password: string, salt: string): Promise<string> {
+  public async hashPassword(password: string, salt: string): Promise<string> {
     return shajs('SHA512').update(salt + password).digest('hex')
-  } 
+  }
+
+  public async connect(id: number): Promise<void> {
+    await this.users.update(id, {
+      status: 'online'
+    })
+  }
+
+  public async disconnect(id: number): Promise<void> {
+    await this.users.update(id, {
+      status: 'offline'
+    })
+  }
 }

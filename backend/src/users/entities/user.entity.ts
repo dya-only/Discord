@@ -61,6 +61,11 @@ export class User {
   @ApiProperty()
   public readonly avatar: string
 
+  @Column()
+  @IsString()
+  @ApiProperty()
+  public readonly status: 'online' | 'offline'
+
   @Column({
     select: false
   })

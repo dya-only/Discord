@@ -11,7 +11,7 @@ interface Props {
 class Element extends Component<Props, object> {
   render() {
     return <div className={this.props.className}>
-      <img src={`/api/files/events/${this.props.avatar}`} alt="" />
+      <img src={`/api/files/avatar/${this.props.avatar}`} alt="" />
       <div className='nickname'>{this.props.nickname}</div>
     </div>
   }
@@ -22,10 +22,25 @@ const Profile = styled(Element)`
   align-items: center;
   cursor: pointer;
   border-radius: 5px;
+  width: 220px;
+  height: 44px;
+  padding: 1px 0;
+  margin-left: 10px;
 
   .nickname {
-    font-weight: bold;
+    font-weight: 500;
     color: white;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: 0 12px;
+  }
+
+  &:hover {
+    background: #35373c;
   }
 `
 

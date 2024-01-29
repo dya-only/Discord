@@ -12,15 +12,15 @@ import { join } from 'path'
     TypeOrmModule.forFeature([User]),
     MulterModule.register({
       storage: diskStorage({
-        destination: join(process.cwd(), 'uploads/avatar'),
+        destination: join(process.cwd(), 'dist/uploads/avatar'),
         filename: (_, file, cb) => {
           cb(null, `${Date.now()}${file.originalname}`)
         },
       }),
-    }) 
+    })
   ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService]
 })
-export class UsersModule {}
+export class UsersModule { }

@@ -389,6 +389,11 @@ const MainPage = () => {
       </div>
 
       <aside className={styles.aside}>
+        <div className={styles.gap}></div>
+        <div className={styles.gap}></div>
+        <div className={styles.gap}></div>
+        <div className={styles.gap}></div>
+
         { joinUsers.map((el: { nickname: string, avatar: string }, idx) => (
           <Profile key={idx} nickname={el.nickname} avatar={el.avatar} />
         ))}

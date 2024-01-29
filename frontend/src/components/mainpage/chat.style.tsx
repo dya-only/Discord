@@ -16,25 +16,25 @@ const Chat = (props: { userId: number, message: string, type: string }) => {
   useEffect(() => {
     const getUser = async () => {
       axios.get(`/api/users/${props.userId}`)
-      .then((resp) => {
-        const res = resp.data
-        setUser(res.body)
-      })
+        .then((resp) => {
+          const res = resp.data
+          setUser(res.body)
+        })
     }
 
     getUser()
   }, [])
-  
-  return props.type === 'normal' ? ( 
+
+  return props.type === 'normal' ? (
     <StyledChat>
-      <div className='profile'></div>
-      
+      <img src={`/api/files/avatar/${user.avatar}`} className='profile' />
+
       <div className='texts'>
-        <div className='nickname'>{ user.nickname }</div>
-        <div className='message'>{ props.message }</div>
+        <div className='nickname'>{user.nickname}</div>
+        <div className='message'>{props.message}</div>
       </div>
     </StyledChat>
-  ) : <StyledMiniChat>{ props.message }</StyledMiniChat>
+  ) : <StyledMiniChat>{props.message}</StyledMiniChat>
 }
 
 const fade = keyframes`
@@ -65,7 +65,6 @@ const StyledChat = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: white;
     margin-right: 15px;
     object-fit: cover;
     cursor: pointer;

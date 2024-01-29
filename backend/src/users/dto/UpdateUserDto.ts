@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional, IsString, Length, MaxLength } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import { IsOptional, IsString, Length, MaxLength } from "class-validator"
 
 export class UpdateUserDto {
   @MaxLength(5000)
@@ -11,9 +11,13 @@ export class UpdateUserDto {
   @Length(1, 20)
   @IsString()
   @ApiProperty()
-  public readonly nickname: string 
+  public readonly nickname: string
 
   @IsString()
   @ApiProperty()
   public readonly avatar: string
+
+  @IsString()
+  @ApiProperty()
+  public readonly status: 'online' | 'offline'
 }

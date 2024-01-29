@@ -16,7 +16,7 @@ import { join } from 'path'
     TypeOrmModule.forFeature([User, Chat, Room, Channel]),
     MulterModule.register({
       storage: diskStorage({
-        destination: join(process.cwd(), 'uploads/events'),
+        destination: join(process.cwd(), 'dist/uploads/events'),
         filename: (_, file, cb) => {
           cb(null, `${Date.now()}${file.originalname}`)
         },

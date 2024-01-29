@@ -10,10 +10,10 @@ import { FileInterceptor } from '@nestjs/platform-express'
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor (
+  constructor(
     private usersService: UsersService
-  ) {}
-  
+  ) { }
+
   @Post()
   public async createUser(@Body() createUserDto: CreateUserDto) {
     const isLoginClaimed = await this.usersService.checkLoginClaim(createUserDto.login)
@@ -88,5 +88,23 @@ export class UsersController {
     return {
       success: true
     }
+  }
+
+  @Get('connect')
+  @UseGuards(AuthGuard)
+  public async connect(@Res({ passthrough: true }) res: Response) {
+    const userId = res.locals.userId
+    await this.usersService.connect(userId)
+
+    return {
+      success: true
+    }
+  }
+
+  @Get('disconnect')
+  @UseGuards(AuthGuard)
+  public async disconnect(@Res({ passthrough: true }) res: Response) {
+    const userId = res.locals.userId
+    await this.usersService.disconnect(userId)
   }
 }
