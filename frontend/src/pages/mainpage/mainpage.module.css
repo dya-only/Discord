@@ -1,6 +1,6 @@
 .nav {
   z-index: 100;
-  bacground: rgb(30, 31, 34);
+  background: rgb(30, 31, 34);
   width: 72px;
   height: 100vh;
   display: flex;
@@ -554,11 +554,11 @@
   border: none;
 }
 
-.copyContainer > button {
+.copyBtn {
   background: rgb(88, 101, 242);
   color: white;
   font-size: 14px;
-  width: 70px;
+  width: 90px;
   height: 35px;
   border-radius: 3px;
   padding: 2px 16px;
@@ -566,7 +566,27 @@
   outline: none;
   border: none;
   cursor: pointer;
+  transition: background .5s;
 }
-.copyContainer > button:hover {
+
+.copyBtnGreen {
+  background: #1a6334;
+  color: white;
+  font-size: 14px;
+  width: 90px;
+  height: 35px;
+  border-radius: 3px;
+  padding: 2px 16px;
+  margin-right: 4px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: background .5s;
+}
+
+.copyBtn:hover {
   background: #4752c4;
+}
+.copyBtnGreen:hover {
+  background: #1a6334;
 }
