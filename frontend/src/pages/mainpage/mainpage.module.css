@@ -1,6 +1,6 @@
 .nav {
   z-index: 100;
-  background: rgb(30, 31, 34);
+  bacground: rgb(30, 31, 34);
   width: 72px;
   height: 100vh;
   display: flex;
@@ -471,4 +471,102 @@
 }
 .policy > strong {
   color: rgb(0, 168, 252); 
+}
+
+.channelMenu {
+  width: 212px;
+  background: rgb(17, 18, 20);
+  position: absolute;
+  top: 56px;
+  left: 82px;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.channelMenuItem {
+  width: 185px;
+  height: 20px;
+  padding: 6px 8px;
+  border-radius: 2px;
+  color: rgb(148, 156, 247); 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px;
+}
+.channelMenuItem:hover {
+  background: #4752c4; 
+  color: white;
+}
+
+.copyWindow {
+  z-index: 1000;
+  width: 408px;
+  background: rgb(49, 51, 56);
+  border-radius: 4px;
+  padding: 4px 16px;
+}
+
+.copyWindowMenu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copyWindowMenu > h1 {
+  color: rgb(242, 243, 245);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.copyX {
+  position: absolute;
+  margin-left: 390px;
+  font-size: 14px;
+  color: rgb(106, 109, 112);
+  transition: color .3s;
+}
+.copyX:hover {
+  cursor: pointer;
+  color: white;
+  transition: color .3s;
+}
+
+.copyContainer {
+  width: 408px;
+  height: 45px;
+  background: rgb(30, 31, 34);
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.copyContainer > input {
+  width: 100%;
+  background: rgb(30, 31, 34);
+  color: rgb(219, 222, 225);
+  font-size: 16px;
+  padding: 10px;
+  outline: none;
+  border: none;
+}
+
+.copyContainer > button {
+  background: rgb(88, 101, 242);
+  color: white;
+  font-size: 14px;
+  width: 70px;
+  height: 35px;
+  border-radius: 3px;
+  padding: 2px 16px;
+  margin-right: 4px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.copyContainer > button:hover {
+  background: #4752c4;
 }
