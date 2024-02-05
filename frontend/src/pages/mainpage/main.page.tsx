@@ -13,6 +13,7 @@ import CreateServerSVG from '../../assets/imgs/create_server.svg'
 import ArrowSVG from '../../assets/imgs/arrow.svg'
 import StyledInput from "../../components/mainpage/input.style"
 import Profile from "../../components/mainpage/profile.style"
+import { useNavigate } from "react-router-dom"
 
 interface MessageInterface {
   msg: string,
@@ -26,6 +27,7 @@ interface OldMessageInterface {
 }
 
 const MainPage = () => {
+  const navigate = useNavigate()
   const [socket] = useState(() => io('http://localhost:3000'))
   const [user, setUser] = useState({
     id: 0,
@@ -311,28 +313,28 @@ const MainPage = () => {
             </div>)
         : null}
 
-        {/* Copy URL Window */}
-        { copyUrlWindow ?
-          <div className={styles.windowContainer}>
-            <div className={styles.windowBG} onClick={() => setCopyUrlWindow(false)}></div>
+      {/* Copy URL Window */}
+      {copyUrlWindow ?
+        <div className={styles.windowContainer}>
+          <div className={styles.windowBG} onClick={() => setCopyUrlWindow(false)}></div>
 
-            <div className={styles.copyWindow}>
-              <div className={styles.copyWindowMenu}>
-                <h1>친구를 {serverName} 그룹으로 초대하기</h1>
-                <svg className={styles.copyX} onClick={() => setCopyUrlWindow(false) } aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
-              </div>
+          <div className={styles.copyWindow}>
+            <div className={styles.copyWindowMenu}>
+              <h1>친구를 {serverName} 그룹으로 초대하기</h1>
+              <svg className={styles.copyX} onClick={() => setCopyUrlWindow(false)} aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+            </div>
 
-              <div className={styles.copyContainer}>
-                <input type="text" readOnly={true} value={`https://localhost:5173/invite/${current.server}`} />
-                <button className={isCopied ? styles.copyBtnGreen : styles.copyBtn} onClick={async () => {
-                  await navigator.clipboard.writeText(`http://localhost:5173/invite/${current.server}`)
-                  setIsCopied(true)
-                  setTimeout(() => setIsCopied(false), 1000)
-                }}>{ isCopied ? '복사됨' : '복사' }</button>
-              </div>
+            <div className={styles.copyContainer}>
+              <input type="text" readOnly={true} value={`https://localhost:5173/invite/${current.server}`} />
+              <button className={isCopied ? styles.copyBtnGreen : styles.copyBtn} onClick={async () => {
+                await navigator.clipboard.writeText(`http://localhost:5173/invite/${current.server}`)
+                setIsCopied(true)
+                setTimeout(() => setIsCopied(false), 1000)
+              }}>{isCopied ? '복사됨' : '복사'}</button>
             </div>
           </div>
-        : null }
+        </div>
+        : null}
 
       <div className={styles.panel}>
         <nav className={styles.nav}>
@@ -381,14 +383,35 @@ const MainPage = () => {
             </div>
             : null}
 
-          {/* Channels */}
-          {channels.map((el: { name: string, id: number }, idx) => (
-            <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
-              onClick={() => {
-                setCurrent({ ...current, channel: el.id })
-              }} ></Channel>
-          ))
-          }
+          <div className={styles.channelContainer}>
+            {/* Channels */}
+            {channels.map((el: { name: string, id: number }, idx) => (
+              <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
+                onClick={() => {
+                  setCurrent({ ...current, channel: el.id })
+                }} ></Channel>
+            ))}
+
+            <div className={styles.statusContainer}>
+              <div className={styles.statusProfile}>
+                <img src={`/api/files/avatar/${user.avatar}`} alt="" />
+                <div className={styles.statusInfo}>
+                  <div className={styles.statusName}>{user.login}</div>
+                  <div className={styles.status}>온라인</div>
+                </div>
+              </div>
+              <div className={styles.voiceMenu}>
+                {/* Microphone */}
+                <svg className={styles.microphone} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4Z"></path><path fill="currentColor" d="M6 10a1 1 0 0 0-2 0 8 8 0 0 0 7 7.94V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.06A8 8 0 0 0 20 10a1 1 0 1 0-2 0 6 6 0 0 1-12 0Z"></path></svg>
+
+                {/* Headset */}
+                <svg className={styles.headset} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-8.95 10h1.87a5 5 0 0 1 4.1 2.13l1.37 1.97a3.1 3.1 0 0 1-.17 3.78 2.85 2.85 0 0 1-3.55.74 11 11 0 1 1 10.66 0c-1.27.71-2.73.23-3.55-.74a3.1 3.1 0 0 1-.17-3.78l1.38-1.97a5 5 0 0 1 4.1-2.13h1.86A9 9 0 0 0 12 3Z"></path></svg>
+
+                {/* Setting */}
+                <svg className={styles.setting} onClick={() => navigate('/setting')} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path fill="var(--interactive-normal)" fillRule="evenodd" d="M10.56 1.1c-.46.05-.7.53-.64.98.18 1.16-.19 2.2-.98 2.53-.8.33-1.79-.15-2.49-1.1-.27-.36-.78-.52-1.14-.24-.77.59-1.45 1.27-2.04 2.04-.28.36-.12.87.24 1.14.96.7 1.43 1.7 1.1 2.49-.33.8-1.37 1.16-2.53.98-.45-.07-.93.18-.99.64a11.1 11.1 0 0 0 0 2.88c.06.46.54.7.99.64 1.16-.18 2.2.19 2.53.98.33.8-.14 1.79-1.1 2.49-.36.27-.52.78-.24 1.14.59.77 1.27 1.45 2.04 2.04.36.28.87.12 1.14-.24.7-.95 1.7-1.43 2.49-1.1.8.33 1.16 1.37.98 2.53-.07.45.18.93.64.99a11.1 11.1 0 0 0 2.88 0c.46-.06.7-.54.64-.99-.18-1.16.19-2.2.98-2.53.8-.33 1.79.14 2.49 1.1.27.36.78.52 1.14.24.77-.59 1.45-1.27 2.04-2.04.28-.36.12-.87-.24-1.14-.96-.7-1.43-1.7-1.1-2.49.33-.8 1.37-1.16 2.53-.98.45.07.93-.18.99-.64a11.1 11.1 0 0 0 0-2.88c-.06-.46-.54-.7-.99-.64-1.16.18-2.2-.19-2.53-.98-.33-.8.14-1.79 1.1-2.49.36-.27.52-.78.24-1.14a11.07 11.07 0 0 0-2.04-2.04c-.36-.28-.87-.12-1.14.24-.7.96-1.7 1.43-2.49 1.1-.8-.33-1.16-1.37-.98-2.53.07-.45-.18-.93-.64-.99a11.1 11.1 0 0 0-2.88 0ZM16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"></path></svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

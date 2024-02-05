@@ -588,3 +588,80 @@
 .copyBtnGreen:hover {
   background: #1a6334;
 }
+
+.channelContainer {
+  height: calc(100vh - 68px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* margin-top: -68px; */
+  cursor: default;
+}
+
+.statusContainer {
+  width: 224px;
+  padding: 0 8px;
+  height: 56px;
+  background: rgb(35, 36, 40);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusProfile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+}
+.statusProfile:hover {
+  background: #3d3e45;
+}
+
+.statusProfile > img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+  /* margin-top: 6px; */
+}
+
+.statusInfo {
+  margin-top: -4px;
+  cursor: pointer;
+}
+
+.statusName {
+  width: 76px;
+  overflow-x: hidden;
+  color: rgb(242, 243, 245);
+  font-size: 14px;
+}
+
+.statusInfo > .status {
+  color: rgb(181, 186, 193);
+  font-size: 12px;
+}
+
+.voiceMenu {
+  width: 96px;
+  display: flex;
+  align-items: center;
+}
+
+.microphone,
+.headset,
+.setting {
+  color: rgb(181, 186, 193);
+  margin-left: 2px;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.microphone:hover,
+.headset:hover,
+.setting:hover {
+  background: #393a41;
+}

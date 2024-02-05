@@ -1,0 +1,121 @@
+.sidebar {
+  width: 34%;
+  height: calc(100vh - 60px);
+  background: rgb(43, 45, 49);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 20px;
+  padding-top: 60px;
+}
+
+.tag {
+  color: rgb(148, 155, 164);
+  font-size: 12px;
+  font-weight: 700;
+  width: 172px;
+  padding: 0 10px 6px 10px;
+}
+
+.sidebtn {
+  width: 172px;
+  height: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: rgb(181, 186, 193);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.sidebtn:hover {
+  background: #35373c;
+  color: #dbdee1;
+}
+
+.activesidebtn {
+  width: 172px;
+  height: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(78, 80, 88, 0.6);
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.panel {
+  padding-left: 40px;
+  font-size: 14px;
+  margin-top: 60px;
+  width: 740px;
+}
+
+.panelMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panelMenu > h2 {
+  margin: 0;
+  color: white;
+}
+
+.xmark {
+  color: rgb(181, 186, 193);
+  font-size: 16px;
+}
+
+.xBtn {
+  width: 34px;
+  height: 34px;
+  border: solid rgb(181, 186, 193) 2px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.xBtn:hover {
+  border: solid white 2px;
+
+  .xmark {
+    color: white;
+  }
+}
+
+.avatarContainer {
+  margin-top: 20px;
+}
+
+.avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.avatarEditLogo {
+  margin-bottom: -80px;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  backdrop-filter: brightness(1);
+  opacity: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+.avatarEditLogo:hover {
+  backdrop-filter: brightness(0.5);
+  opacity: 1;
+}
+
+.editLogo {
+  z-index: 30;
+}
