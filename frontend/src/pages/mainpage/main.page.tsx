@@ -323,9 +323,9 @@ const MainPage = () => {
               </div>
 
               <div className={styles.copyContainer}>
-                <input type="text" readOnly={true} value={`https://localhost:5173/join/${joinKey}`} />
+                <input type="text" readOnly={true} value={`https://localhost:5173/invite/${current.server}`} />
                 <button className={isCopied ? styles.copyBtnGreen : styles.copyBtn} onClick={async () => {
-                  await navigator.clipboard.writeText(`https://localhost:5173/join/${joinKey}`)
+                  await navigator.clipboard.writeText(`http://localhost:5173/invite/${current.server}`)
                   setIsCopied(true)
                   setTimeout(() => setIsCopied(false), 1000)
                 }}>{ isCopied ? '복사됨' : '복사' }</button>
@@ -418,9 +418,9 @@ const MainPage = () => {
         {user.rooms.length ?
           <form action='' className={styles.form} onSubmit={sendMessage}>
             <div className={styles.bar}>
-              <button className={styles.upload}>
+              <div className={styles.upload}>
                 <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b5bac1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="transparent"></circle><path fill="var(--interactive-normal)" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm0-17a1 1 0 0 1 1 1v4h4a1 1 0 1 1 0 2h-4v4a1 1 0 1 1-2 0v-4H7a1 1 0 1 1 0-2h4V7a1 1 0 0 1 1-1Z" clipRule="evenodd"></path></svg>
-              </button>
+              </div>
 
               <input type="text" autoComplete='off' className={styles.input} placeholder={`#general에 메시지 보내기`} value={msg} onChange={(e: ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)} />
             </div>
