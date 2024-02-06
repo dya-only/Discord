@@ -94,6 +94,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  object-fit: cover;
   z-index: 10;
 }
 
@@ -118,4 +119,8 @@
 
 .editLogo {
   z-index: 30;
+}
+
+.imgInput {
+  display: none;
 }

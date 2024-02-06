@@ -37,6 +37,7 @@ const Profile = styled(Element)`
     height: 32px;
     border-radius: 50%;
     margin: 0 12px;
+    object-fit: cover;
   }
 
   &:hover {

@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import { ApiPropertyOptional } from "@nestjs/swagger"
 import { IsOptional, IsString, Length, MaxLength } from "class-validator"
 
 export class UpdateUserDto {
@@ -8,16 +8,19 @@ export class UpdateUserDto {
   @ApiPropertyOptional()
   public readonly bio?: string
 
-  @Length(1, 20)
+  @Length(0, 20)
   @IsString()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   public readonly nickname: string
 
   @IsString()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   public readonly avatar: string
 
   @IsString()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   public readonly status: 'online' | 'offline'
 }
