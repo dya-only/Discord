@@ -598,6 +598,10 @@
   cursor: default;
 }
 
+.noChannel {
+  height: 100%;
+}
+
 .statusContainer {
   width: 224px;
   padding: 0 8px;

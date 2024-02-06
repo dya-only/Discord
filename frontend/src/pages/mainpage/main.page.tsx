@@ -392,6 +392,8 @@ const MainPage = () => {
                 }} ></Channel>
             ))}
 
+            { channels.length === 0 ? <div className={styles.noChannel}></div> : null}
+
             <div className={styles.statusContainer}>
               <div className={styles.statusProfile}>
                 <img src={`/api/files/avatar/${user.avatar}`} alt="" />
