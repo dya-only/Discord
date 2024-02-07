@@ -1,12 +1,18 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({
+  cors: {
+    origin: 'http://39.116.116.214:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  },
+})
 export class EventsGateway {
   @WebSocketServer()
   server: Server
 
-  onlineUsers = new Set() 
+  onlineUsers = new Set()
 
   // onConnection
   handleConnection(client: Socket) {
