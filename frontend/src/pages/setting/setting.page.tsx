@@ -1,12 +1,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 import styles from './setting.module.css'
 
 import StyledMain from '../../components/setting/main.style'
 
 const Setting = () => {
-  const navigate = useNavigate()
   const [tab, setTab] = useState<number>(1)
   const [user, setUser] = useState<any>({})
   const [avatar, setAvatar] = useState<string>('/api/files/avatar/default.png')
@@ -67,7 +65,7 @@ const Setting = () => {
       {tab === 1 ? <section className={styles.panel}>
         <div className={styles.panelMenu}>
           <h2>내 계정</h2>
-          <div className={styles.xBtn} onClick={() => navigate('/')}>
+          <div className={styles.xBtn} onClick={() => window.location.href = '/'}>
             <svg className={styles.xmark} aria-hidden="true" role="img" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
           </div>
         </div>

@@ -10,18 +10,18 @@ const Chat = (props: { userId: number, message: string, type: string }) => {
     createdAt: '',
     email: '',
     login: '',
-    nickname: '',
+    nickname: ''
   })
+  
+  const getUser = async () => {
+    axios.get(`/api/users/${props.userId}`)
+      .then((resp) => {
+        const res = resp.data
+        setUser(res.body)
+      })
+  }
 
   useEffect(() => {
-    const getUser = async () => {
-      axios.get(`/api/users/${props.userId}`)
-        .then((resp) => {
-          const res = resp.data
-          setUser(res.body)
-        })
-    }
-
     getUser()
   }, [])
 

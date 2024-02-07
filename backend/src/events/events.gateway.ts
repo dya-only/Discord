@@ -6,14 +6,20 @@ export class EventsGateway {
   @WebSocketServer()
   server: Server
 
+  onlineUsers = new Set() 
+
   // onConnection
   handleConnection(client: Socket) {
-    console.log(`client connected: ${client.id}`)
+    const userId = client.handshake.query.userId
+    this.onlineUsers.add(userId)
+    this.server.emit('onlineUsers', Array.from(this.onlineUsers))
   }
 
   // onDisconnect
   handleDisconnect(client: Socket) {
-    console.log(`client disconnected: ${client.id}`)
+    const userId = client.handshake.query.userId
+    this.onlineUsers.delete(userId)
+    this.server.emit('onlineUsers', Array.from(this.onlineUsers))
   }
 
   @SubscribeMessage('joinChannel')

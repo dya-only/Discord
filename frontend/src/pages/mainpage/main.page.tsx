@@ -29,7 +29,6 @@ interface OldMessageInterface {
 
 const MainPage = () => {
   const navigate = useNavigate()
-  const [socket] = useState(() => io('http://localhost:3000'))
   const [user, setUser] = useState({
     id: 0,
     avatar: '',
@@ -69,20 +68,34 @@ const MainPage = () => {
   const [copyUrlWindow, setCopyUrlWindow] = useState<boolean>(false)
   const [isCopied, setIsCopied] = useState<boolean>(false)
   const [createChannelName, setCreateChannelName] = useState<string>('')
+  const [onlines, setOnlines] = useState<string[]>([])
+
+  const [socket, setSocket] = useState(() => io('http://localhost:3000', { query: { userId: user.id } }))
+  // Socket reset on user change
+  useEffect(() => {
+    const newSocket = io('http://localhost:3000', {
+      query: { userId: user.id }
+    })
+    setSocket(newSocket)
+
+    return () => {
+      newSocket.disconnect()
+    }
+  }, [user.id])
 
   const [view, inView] = useInView()
   const scrollRef = useRef<HTMLDivElement>(null)
   const serverLogoRef = useRef<HTMLInputElement>(null)
 
   const createChannel = async () => {
-    await axios.post('/api/events/channel', { 
+    await axios.post('/api/events/channel', {
       roomId: current.channel,
       name: createChannelName
-     })
+    })
 
-     getChannels(current.server)
-     setCreateChannelName('')
-     setCreateChannelWindow(false)
+    getChannels(current.server)
+    setCreateChannelName('')
+    setCreateChannelWindow(false)
   }
 
   const joinServer = async () => {
@@ -210,8 +223,15 @@ const MainPage = () => {
 
     socket.on('sendMessage', handleMessage)
 
+    // On any user on connect
+    socket.on('onlineUsers', (users: string[]) => {
+      console.table(users)
+      setOnlines(users) 
+    })
+
     return () => {
       socket.off('sendMessage', handleMessage)
+      socket.disconnect()
     }
   }, [socket])
 
@@ -434,7 +454,7 @@ const MainPage = () => {
             <div>
               {channels.length ? <div className={styles.category}>
                 채팅 채널
-                { serverInfo.ownerId === user.id ? <svg className={styles.addChannelBtn} onClick={() => setCreateChannelWindow(true)} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path></svg> : null }
+                {serverInfo.ownerId === user.id ? <svg className={styles.addChannelBtn} onClick={() => setCreateChannelWindow(true)} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path></svg> : null}
               </div> : null}
 
               {/* Channels */}
@@ -513,9 +533,18 @@ const MainPage = () => {
         <div className={styles.gap}></div>
         <div className={styles.gap}></div>
 
-        {joinUsers.map((el: { nickname: string, avatar: string }, idx) => (
-          <Profile key={idx} nickname={el.nickname} avatar={el.avatar} />
+        <div className={styles.asideOnline}>온라인 ㅡ { onlines.length }</div>
+        {onlines.map((el) => (
+          <Profile key={+el} userId={+el} type={'online'} />
         ))}
+
+        <div className={styles.gap}></div>
+
+        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length }</div>
+        {joinUsers.map((el: { id: number }) => (
+          !onlines.includes(el.id.toString()) ?
+            <Profile key={el.id} userId={el.id} type={'offline'} />
+        : null ))}
       </aside>
     </StyledMain>
   )

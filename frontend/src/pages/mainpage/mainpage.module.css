@@ -178,6 +178,14 @@
   align-items: center;
 }
 
+.asideOnline {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(148, 155, 164);
+  margin-left: 20px;
+  margin-bottom: 4px;
+}
+
 .panel {
   display: flex;
 }
