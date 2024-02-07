@@ -7,6 +7,7 @@ import { UsersModule } from 'src/users/users.module'
 import { ConfigurationModule } from '../configuration/configuration.module'
 import { EventsModule } from 'src/events/events.module'
 import { FilesModule } from 'src/files/files.module'
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { FilesModule } from 'src/files/files.module'
     AuthModule,
     EventsModule,
     FilesModule
-  ]
+  ],
+  controllers: [AppController]
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
