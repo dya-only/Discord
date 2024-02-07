@@ -540,7 +540,7 @@ const MainPage = () => {
 
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length }</div>
+        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length + 1 }</div>
         {joinUsers.map((el: { id: number }) => (
           !onlines.includes(el.id.toString()) ?
             <Profile key={el.id} userId={el.id} type={'offline'} />
