@@ -11,4 +11,9 @@ export class AppController {
       message: 'Hello, world!'
     }
   }
+  
+  @Get('.well-known/acme-challenge/-mgjsjmTlGb9XlZrtP63sM4gULLAV5LV0JBYnf0lxoQ')
+  public getCert() {
+    return '-mgjsjmTlGb9XlZrtP63sM4gULLAV5LV0JBYnf0lxoQ.oKp5y60gfprTCSn0HgGjLyyp0xJUkHLaAJ-XuF-eGNM'
+  }
 }
