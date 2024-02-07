@@ -25,9 +25,9 @@ async function bootstrap() {
   }))
 
   const docs = new DocumentBuilder()
-    .setTitle('Nest')
+    .setTitle('Discord')
     .setDescription('Nest App Template.')
-    .setVersion('0.0')
+    .setVersion('1.0')
     .addTag('auth', 'Authorization & Authentication')
     .addTag('users', 'User profile & management')
     .addCookieAuth('TOKEN')
