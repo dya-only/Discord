@@ -707,8 +707,8 @@
 }
 
 .createChannelBtnCancel {
-  width: 64px;
-  height: 34px;
+  width: 108px;
+  height: 40px;
   padding: 2px 16px;
   outline: none;
   border: none;
@@ -716,6 +716,7 @@
   background: transparent;
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .createChannelBtnCreate {
@@ -729,6 +730,7 @@
   font-weight: 500;
   outline: none;
   border: none;
+  cursor: pointer;
 }
 
 .statusContainer {

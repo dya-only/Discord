@@ -40,6 +40,9 @@ const MainPage = () => {
     nickname: '',
     rooms: []
   })
+  const [serverInfo, setServerInfo] = useState({
+    ownerId: 0,
+  })
   const [channels, setChannels] = useState([])
   const [current, setCurrent] = useState({
     server: '',
@@ -76,6 +79,10 @@ const MainPage = () => {
       roomId: current.channel,
       name: createChannelName
      })
+
+     getChannels(current.server)
+     setCreateChannelName('')
+     setCreateChannelWindow(false)
   }
 
   const joinServer = async () => {
@@ -174,6 +181,7 @@ const MainPage = () => {
   const getServerInfo = async (roomKey: string) => {
     const res = (await axios.get(`/api/events/room/${roomKey}`)).data.body
     setJoinUsers(res.users)
+    setServerInfo({ ownerId: res.ownerId })
 
     return res
   }
@@ -426,7 +434,7 @@ const MainPage = () => {
             <div>
               {channels.length ? <div className={styles.category}>
                 채팅 채널
-                <svg className={styles.addChannelBtn} onClick={() => setCreateChannelWindow(true)} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path></svg>
+                { serverInfo.ownerId === user.id ? <svg className={styles.addChannelBtn} onClick={() => setCreateChannelWindow(true)} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path></svg> : null }
               </div> : null}
 
               {/* Channels */}
