@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseFilePipe, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { Response } from 'express'
 import { AuthGuard } from 'src/auth/auth.guard'
 import { EventsService } from './events.service'
@@ -80,7 +80,7 @@ export class EventsController {
   @Post('room')
   @UseInterceptors(FileInterceptor('logo'))
   public async createRoom(
-    @UploadedFile() logo: Express.Multer.File,
+    @UploadedFile(new ParseFilePipe({ fileIsRequired: false })) logo: Express.Multer.File,
     @Res({ passthrough: true }) res: Response,
     @Body() createRoomDto: CreateRoomDto
   ) {
