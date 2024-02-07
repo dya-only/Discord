@@ -1,19 +1,20 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useInView } from 'react-intersection-observer'
+import { io } from "socket.io-client"
 import axios from "axios"
 import styles from './mainpage.module.css'
 import StyledMain from "../../components/mainpage/main.style"
 import ServerIcon from "../../components/mainpage/server.style"
 import Channel from "../../components/mainpage/channel.style"
 import Chat from "../../components/mainpage/chat.style"
-import { io } from "socket.io-client"
-import { useInView } from 'react-intersection-observer'
 import StartMenu from "../../components/mainpage/start.style"
+import StyledInput from "../../components/mainpage/input.style"
+import Profile from "../../components/mainpage/profile.style"
 
 import CreateServerSVG from '../../assets/imgs/create_server.svg'
 import ArrowSVG from '../../assets/imgs/arrow.svg'
-import StyledInput from "../../components/mainpage/input.style"
-import Profile from "../../components/mainpage/profile.style"
-import { useNavigate } from "react-router-dom"
+import ChannelType from '../../assets/imgs/channelType.png'
 
 interface MessageInterface {
   msg: string,
@@ -61,12 +62,21 @@ const MainPage = () => {
   const [logoImage, setLogoImage] = useState<any>()
   const [logoPreview, setLogoPreview] = useState<string>()
   const [channelMenu, setChannelMenu] = useState<boolean>(false)
+  const [createChannelWindow, setCreateChannelWindow] = useState<boolean>(false)
   const [copyUrlWindow, setCopyUrlWindow] = useState<boolean>(false)
   const [isCopied, setIsCopied] = useState<boolean>(false)
+  const [createChannelName, setCreateChannelName] = useState<string>('')
 
   const [view, inView] = useInView()
   const scrollRef = useRef<HTMLDivElement>(null)
   const serverLogoRef = useRef<HTMLInputElement>(null)
+
+  const createChannel = async () => {
+    await axios.post('/api/events/channel', { 
+      roomId: current.channel,
+      name: createChannelName
+     })
+  }
 
   const joinServer = async () => {
     await axios.get(`/api/events/room/join/${inviteCode}`)
@@ -230,6 +240,7 @@ const MainPage = () => {
 
   return (
     <StyledMain>
+      {/* Create Server Window */}
       {isServerWindow ?
         (!inviteStep ? <div className={styles.windowContainer}>
           {isServerWindow ? <div className={styles.windowBG} onClick={() => setIsServerWindow(false)}></div> : null}
@@ -336,6 +347,34 @@ const MainPage = () => {
         </div>
         : null}
 
+      {/* Create Channel Window */}
+      {createChannelWindow ?
+        <div className={styles.windowContainer}>
+          <div className={styles.windowBG} onClick={() => setCreateChannelWindow(false)}></div>
+
+          <div className={styles.createChannelWindow}>
+            <div className={styles.createChannelMenu}>
+              채널 만들기
+              <svg className={styles.createChannelX} onClick={() => setCreateChannelWindow(false)} aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path></svg>
+            </div>
+
+            <label className={styles.createChannelLabel}>채널 유형</label>
+            <img className={styles.createChannelType} src={ChannelType} alt="" />
+
+            <label className={styles.createChannelLabel}>채널 이름</label>
+            <div className={styles.createChannelInputContainer}>
+              <svg className={styles.createChannelInputLogo} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="M10.99 3.16A1 1 0 1 0 9 2.84L8.15 8H4a1 1 0 0 0 0 2h3.82l-.67 4H3a1 1 0 1 0 0 2h3.82l-.8 4.84a1 1 0 0 0 1.97.32L8.85 16h4.97l-.8 4.84a1 1 0 0 0 1.97.32l.86-5.16H20a1 1 0 1 0 0-2h-3.82l.67-4H21a1 1 0 1 0 0-2h-3.82l.8-4.84a1 1 0 1 0-1.97-.32L15.15 8h-4.97l.8-4.84ZM14.15 14l.67-4H9.85l-.67 4h4.97Z" clipRule="evenodd"></path></svg>
+              <input type="text" className={styles.createChannelInput} value={createChannelName} onChange={(e: ChangeEvent<HTMLInputElement>) => setCreateChannelName(e.target.value)} placeholder="새로운 채널" />
+            </div>
+
+            <div className={styles.createChannelBtns}>
+              <button className={styles.createChannelBtnCancel} onClick={() => setCreateChannelWindow(false)}>취소</button>
+              <button className={styles.createChannelBtnCreate} onClick={() => createChannel()}>채널 만들기</button>
+            </div>
+          </div>
+        </div>
+        : null}
+
       <div className={styles.panel}>
         <nav className={styles.nav}>
 
@@ -384,15 +423,22 @@ const MainPage = () => {
             : null}
 
           <div className={styles.channelContainer}>
-            {/* Channels */}
-            {channels.map((el: { name: string, id: number }, idx) => (
-              <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
-                onClick={() => {
-                  setCurrent({ ...current, channel: el.id })
-                }} ></Channel>
-            ))}
+            <div>
+              {channels.length ? <div className={styles.category}>
+                채팅 채널
+                <svg className={styles.addChannelBtn} onClick={() => setCreateChannelWindow(true)} aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path></svg>
+              </div> : null}
 
-            { channels.length === 0 ? <div className={styles.noChannel}></div> : null}
+              {/* Channels */}
+              {channels.map((el: { name: string, id: number }, idx) => (
+                <Channel key={idx} name={el.name} active={current.channel === el.id ? true : false}
+                  onClick={() => {
+                    setCurrent({ ...current, channel: el.id })
+                  }} ></Channel>
+              ))}
+            </div>
+
+            {channels.length === 0 ? <div className={styles.noChannel}></div> : null}
 
             <div className={styles.statusContainer}>
               <div className={styles.statusProfile}>

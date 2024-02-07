@@ -598,8 +598,137 @@
   cursor: default;
 }
 
+.category {
+  width: 208px;
+  margin-left: 15px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(148, 155, 164);
+}
+
+.addChannelBtn {
+  cursor: pointer;
+}
+.addChannelBtn:hover {
+  color: #cacdcf; 
+}
+
 .noChannel {
   height: 100%;
+}
+
+.createChannelWindow {
+  z-index: 1000;
+  width: 460px;
+  height: 482px;
+  border-radius: 12px;
+  background: rgb(49, 51, 56); 
+  box-shadow: rgba(30, 31, 34, 0.6) 0px 0px 0px 1px, rgba(0, 0, 0, 0.2) 0px 2px 10px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.createChannelMenu {
+  width: 420px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  color: rgb(242, 243, 245);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.createChannelX {
+  color: rgba(181, 186, 193, 0.6);
+  cursor: pointer;
+  transition: color .3s;
+}
+.createChannelX:hover {
+  color: rgb(181, 186, 193);
+  transition: color .3s;
+}
+
+.createChannelType {
+  width: 420px;
+}
+
+.createChannelLabel {
+  margin-left: 12px;
+  margin-top: 30px;
+  width: 420px;
+  color: rgb(219, 222, 225);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.createChannelInputContainer {
+  width: 410px;
+  height: 40px;
+  background: rgb(30, 31, 34);
+  border-radius: 3px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.createChannelInputLogo {
+  color: rgb(219, 222, 225);
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+}
+
+.createChannelInput {
+  width: 100%;
+  margin-left: 4px;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: white;
+}
+
+.createChannelBtns {
+  margin-top: 80px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  width: 428px;
+  height: 38px;
+  padding: 16px;
+  background: rgb(43, 45, 49);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.createChannelBtnCancel {
+  width: 64px;
+  height: 34px;
+  padding: 2px 16px;
+  outline: none;
+  border: none;
+  color: white;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.createChannelBtnCreate {
+  width: 108px;
+  height: 40px;
+  padding: 2px 16px;
+  background: rgb(88, 101, 242);
+  border-radius: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  border: none;
 }
 
 .statusContainer {
