@@ -5,6 +5,7 @@ import { Server, Socket } from 'socket.io'
   cors: {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
     credentials: true
   },
 })
