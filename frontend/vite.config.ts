@@ -9,7 +9,8 @@ export default defineConfig({
       '/api': {
         // target: 'http://localhost:3000',
         target: 'http://39.116.116.214:3000',
-        changeOrigin: true
+        changeOrigin: true,
+        secure: false
       }
     }
   }
