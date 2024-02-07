@@ -70,12 +70,12 @@ const MainPage = () => {
   const [createChannelName, setCreateChannelName] = useState<string>('')
   const [onlines, setOnlines] = useState<string[]>([])
 
-  const [socket, setSocket] = useState(() => io('http://39.116.116.214:3000', {
+  const [socket, setSocket] = useState(() => io('https://39.116.116.214:3000', {
     query: { userId: user.id }
   }))
   // Socket reset on user change
   useEffect(() => {
-    const newSocket = io('http://39.116.116.214:3000', {
+    const newSocket = io('https://39.116.116.214:3000', {
       query: { userId: user.id },
     })
     setSocket(newSocket)
