@@ -66,7 +66,7 @@ const MainPage = () => {
   const [channelMenu, setChannelMenu] = useState<boolean>(false)
   const [createChannelWindow, setCreateChannelWindow] = useState<boolean>(false)
   const [copyUrlWindow, setCopyUrlWindow] = useState<boolean>(false)
-  const [isCopied, setIsCopied] = useState<boolean>(false)
+  // const [isCopied, setIsCopied] = useState<boolean>(false)
   const [createChannelName, setCreateChannelName] = useState<string>('')
   const [onlines, setOnlines] = useState<string[]>([])
 
@@ -366,12 +366,12 @@ const MainPage = () => {
             </div>
 
             <div className={styles.copyContainer}>
-              <input type="text" readOnly={true} value={`https://localhost:5173/invite/${current.server}`} />
-              <button className={isCopied ? styles.copyBtnGreen : styles.copyBtn} onClick={async () => {
-                await navigator.clipboard.writeText(`http://localhost:5173/invite/${current.server}`)
+              <input type="text" readOnly={true} value={`http://discord.dya.codes/invite/${current.server}`} />
+              {/* <button className={isCopied ? styles.copyBtnGreen : styles.copyBtn} onClick={async () => {
+                await navigator.clipboard.writeText(`http://discord.dya.codes/invite/${current.server}`)
                 setIsCopied(true)
                 setTimeout(() => setIsCopied(false), 1000)
-              }}>{isCopied ? '복사됨' : '복사'}</button>
+              }}>{isCopied ? '복사됨' : '복사'}</button> */}
             </div>
           </div>
         </div>
@@ -536,13 +536,13 @@ const MainPage = () => {
         <div className={styles.gap}></div>
 
         <div className={styles.asideOnline}>온라인 ㅡ { onlines.length }</div>
-        {onlines.map((el) => (
-          <Profile key={+el} userId={+el} type={'online'} />
+        {joinUsers.filter((x: { id: number }) => onlines.includes(x.id.toString())).map((el: { id: number }) => (
+          <Profile key={+el.id} userId={+el.id} type={'online'} />
         ))}
 
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length + 1 }</div>
+        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length }</div>
         {joinUsers.map((el: { id: number }) => (
           !onlines.includes(el.id.toString()) ?
             <Profile key={el.id} userId={el.id} type={'offline'} />

@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/clipboard": "^2.0.7",
     "@types/react-scroll-to-bottom": "^4.2.4",
     "@types/styled-components": "^5.1.34",
     "axios": "^1.6.5",
+    "clipboard": "^2.0.11",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

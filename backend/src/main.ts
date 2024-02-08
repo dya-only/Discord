@@ -7,7 +7,7 @@ import * as cookieParser from 'cookie-parser'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
-  app.setGlobalPrefix('api', { exclude: ['/', '.well-known/acme-challenge/-mgjsjmTlGb9XlZrtP63sM4gULLAV5LV0JBYnf0lxoQ'] })
+  app.setGlobalPrefix('api', { exclude: ['/'] })
   app.enableCors()
   app.use(cookieParser())
   app.useGlobalPipes(new ValidationPipe({
