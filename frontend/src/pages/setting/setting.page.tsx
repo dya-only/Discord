@@ -17,6 +17,11 @@ const Setting = () => {
     reader.readAsDataURL(file)
 
     reader.onload = async () => {
+      if (file.type.split('/')[0] !== 'image') {
+        console.log('not a image')
+        return
+      }
+
       const formData = new FormData()
       formData.append('avatar', file)
 

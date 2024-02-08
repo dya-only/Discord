@@ -32,6 +32,7 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   public async findAllUser() {
     const users = await this.usersService.findAllUser()
 
