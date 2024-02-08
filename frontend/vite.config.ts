@@ -8,9 +8,13 @@ export default defineConfig({
     proxy: {
       '/api': {
         // target: 'http://localhost:3000',
-        target: 'http://39.116.116.214:3000',
+        target: 'http://43.202.40.0:3000',
         changeOrigin: true,
         secure: false
+      },
+      '/socket.io': {
+        target: 'ws://43.202.40.0:3000',
+        ws: true
       }
     }
   }
