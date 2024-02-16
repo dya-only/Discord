@@ -1,8 +1,4 @@
 discordsv.dya.codes {
-    proxy / app:3000 {
-        proxy_header Host {host}
-        proxy_header X-Real-IP {remote}
-        proxy_header X-Forwarded-Proto {scheme}
-    }
+    reverse_proxy app:3000
     tls entrydia7691@gmail.com
 }

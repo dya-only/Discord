@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54f7a59b-965f-421c-9fe8-0735a0a6e8f5" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/Caddyfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Caddyfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +38,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -51,7 +51,8 @@
       <option name="presentableId" value="Default" />
       <updated>1708087463657</updated>
       <workItem from="1708087464684" duration="24000" />
-      <workItem from="1708087492721" duration="1310000" />
+      <workItem from="1708087492721" duration="2488000" />
+      <workItem from="1708099166014" duration="53000" />
     </task>
     <servers />
   </component>
