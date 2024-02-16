@@ -25,3 +25,14 @@ services:
       - MARIADB_PASSWORD=nestpassword
     volumes:
       - ./data/db:/var/lib/mysql:rw
+
+  caddy:
+    image: caddy:2.7.6-alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./.caddy:/root/.caddy
+      - ./conf/Caddyfile:/etc/Caddyfile
+    depends_on:
+      - app

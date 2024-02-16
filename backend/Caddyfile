@@ -1,0 +1,4 @@
+discordsv.dya.codes {
+    tls dyacode@proton.me
+    reverse_proxy localhost:3000
+}
