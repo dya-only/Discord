@@ -33,6 +33,6 @@ services:
       - '443:443'
     volumes:
       - ./.caddy:/root/.caddy
-      - ./conf/Caddyfile:/etc/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
     depends_on:
       - app
