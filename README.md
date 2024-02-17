@@ -1,6 +1,11 @@
 ### Discord Clone
 ### React + Nest.JS + Socket.io
 
+Backend Diagram
+![image](https://github.com/dya-only/Discord/assets/51194584/c26aef2a-83a3-4c1d-9ead-31dd7bbc31df)
+
+
+
 Screenshots
 ![image](https://github.com/dya-only/Discord/assets/51194584/99dd9bad-0e6d-41dd-90cd-34968d698231)
 ![image](https://github.com/dya-only/Discord/assets/51194584/3d180a78-4073-4ef5-9fb8-94f843235eeb)
