@@ -66,16 +66,15 @@ const MainPage = () => {
   const [channelMenu, setChannelMenu] = useState<boolean>(false)
   const [createChannelWindow, setCreateChannelWindow] = useState<boolean>(false)
   const [copyUrlWindow, setCopyUrlWindow] = useState<boolean>(false)
-  // const [isCopied, setIsCopied] = useState<boolean>(false)
   const [createChannelName, setCreateChannelName] = useState<string>('')
   const [onlines, setOnlines] = useState<string[]>([])
 
-  const [socket, setSocket] = useState(() => io('ws://43.202.40.0:3000', {
+  const [socket, setSocket] = useState(() => io('ws://discordsv.dya.codes', {
     query: { userId: user.id }
   }))
   // Socket reset on user change
   useEffect(() => {
-    const newSocket = io('ws://43.202.40.0:3000', {
+    const newSocket = io('ws://discordsv.dya.codes', {
       query: { userId: user.id },
     })
     setSocket(newSocket)

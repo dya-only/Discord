@@ -7,14 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://localhost:3000',
-        target: 'http://43.202.40.0:3000',
+        target: 'https://discordsv.dya.codes',
         changeOrigin: true,
         secure: false
-      },
-      '/socket.io': {
-        target: 'ws://43.202.40.0:3000',
-        ws: true
       }
     }
   }
