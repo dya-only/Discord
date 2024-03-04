@@ -15,7 +15,7 @@ const Profile = (props: { userId: number, type: 'online' | 'offline' }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      axios.get(`/api/users/${props.userId}`)
+      axios.get(`https://discordsv.dya.codes/api/users/${props.userId}`)
         .then((resp) => {
           const res = resp.data
           setUser(res.body)
@@ -26,14 +26,14 @@ const Profile = (props: { userId: number, type: 'online' | 'offline' }) => {
 
   return props.type === 'online' ? (
     <Online>
-      <img src={`/api/files/avatar/${user.avatar || 'default.png'}`} alt="" />
+      <img src={`https://discordsv.dya.codes/api/files/avatar/${user.avatar || 'default.png'}`} alt="" />
       <div className='nickname'>{user.nickname}</div>
       <div className='statusContainer'>
         <div className='status' />
       </div>
     </Online>
   ) : <Offline>
-    <img src={`/api/files/avatar/${user.avatar}`} alt="" />
+    <img src={`https://discordsv.dya.codes/api/files/avatar/${user.avatar}`} alt="" />
     <div className='nickname'>{user.nickname}</div>
   </Offline>
 }

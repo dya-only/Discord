@@ -14,7 +14,7 @@ const Chat = (props: { userId: number, message: string, type: string }) => {
   })
   
   const getUser = async () => {
-    axios.get(`/api/users/${props.userId}`)
+    axios.get(`https://discordsv.dya.codes/api/users/${props.userId}`)
       .then((resp) => {
         const res = resp.data
         setUser(res.body)
@@ -27,7 +27,7 @@ const Chat = (props: { userId: number, message: string, type: string }) => {
 
   return props.type === 'normal' ? (
     <StyledChat>
-      <img src={`/api/files/avatar/${user.avatar}`} className='profile' />
+      <img src={`https://discordsv.dya.codes/api/files/avatar/${user.avatar}`} className='profile' />
 
       <div className='texts'>
         <div className='nickname'>{user.nickname}</div>
