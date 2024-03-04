@@ -16,7 +16,7 @@ const Login = () => {
   const getLogin =  (e: FormEvent) => {
     e.preventDefault()
 
-    axios.post('https://discordsv.dya.codes/api/auth/by-pass', user, {
+    axios.post('/api/auth/by-pass', user, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -28,7 +28,7 @@ const Login = () => {
   }
 
   const verify = () => {
-    axios.get('https://discordsv.dya.codes/api/auth/status')
+    axios.get('/api/auth/status')
     .then((resp) => {
       const res = resp.data
       if (res.success) window.location.href = '/'

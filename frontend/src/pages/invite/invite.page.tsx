@@ -14,7 +14,7 @@ const Join = () => {
   })
 
   const getServer = async () => {
-    axios.get(`https://discordsv.dya.codes/api/events/room/${roomKey}`)
+    axios.get(`/api/events/room/${roomKey}`)
       .then((resp) => {
         const res = resp.data.body
         setServer(res)
@@ -22,7 +22,7 @@ const Join = () => {
   }
 
   const verify = async () => {
-    axios.get('https://discordsv.dya.codes/api/auth/status')
+    axios.get('/api/auth/status')
       .then(() => {
         getServer()
       })
@@ -32,7 +32,7 @@ const Join = () => {
   }
 
   const joinRoom = async () => {
-    axios.get(`https://discordsv.dya.codes/api/events/room/join/${roomKey}`)
+    axios.get(`/api/events/room/join/${roomKey}`)
       .then(() => {
         window.location.href = '/'
       })
@@ -50,7 +50,7 @@ const Join = () => {
       <Artwork />
 
       <div className={styles.window}>
-        <img className={styles.logo} src={`https://discordsv.dya.codes/api/files/events/${server.image}`} alt="" />
+        <img className={styles.logo} src={`/api/files/events/${server.image}`} alt="" />
         <h1>{ server.name }</h1>
         <div className={styles.status}>
           <div className={styles.i}></div>

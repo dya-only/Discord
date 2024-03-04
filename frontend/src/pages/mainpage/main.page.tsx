@@ -66,6 +66,7 @@ const MainPage = () => {
   const [channelMenu, setChannelMenu] = useState<boolean>(false)
   const [createChannelWindow, setCreateChannelWindow] = useState<boolean>(false)
   const [copyUrlWindow, setCopyUrlWindow] = useState<boolean>(false)
+  // const [isCopied, setIsCopied] = useState<boolean>(false)
   const [createChannelName, setCreateChannelName] = useState<string>('')
   const [onlines, setOnlines] = useState<string[]>([])
 
@@ -89,7 +90,7 @@ const MainPage = () => {
   const serverLogoRef = useRef<HTMLInputElement>(null)
 
   const createChannel = async () => {
-    await axios.post('https://discordsv.dya.codes/api/events/channel', {
+    await axios.post('/api/events/channel', {
       roomId: current.channel,
       name: createChannelName
     })
@@ -100,7 +101,7 @@ const MainPage = () => {
   }
 
   const joinServer = async () => {
-    await axios.get(`https://discordsv.dya.codes/api/events/room/join/${inviteCode}`)
+    await axios.get(`/api/events/room/join/${inviteCode}`)
     window.location.href = '/'
   }
 
@@ -109,7 +110,7 @@ const MainPage = () => {
     formData.append('logo', logoImage)
     formData.append('name', createServerDto.name)
 
-    axios.post('https://discordsv.dya.codes/api/events/room',
+    axios.post('/api/events/room',
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -139,7 +140,7 @@ const MainPage = () => {
     if (msg) {
       socket.emit('sendMessage', { joinKey, msg, userId: user.id })
 
-      axios.post('https://discordsv.dya.codes/api/events', {
+      axios.post('/api/events', {
         channelId: current.channel,
         message: msg
       }, { headers: { 'Content-Type': 'application/json' } })
@@ -150,7 +151,7 @@ const MainPage = () => {
   }
 
   const initChat = async (channelId: number) => {
-    axios.get(`https://discordsv.dya.codes/api/events/chat/${channelId}/0`)
+    axios.get(`/api/events/chat/${channelId}/0`)
       .then((resp) => {
         const res = resp.data
         setOldChat(res.body.reverse())
@@ -158,7 +159,7 @@ const MainPage = () => {
   }
 
   const getChats = async (channelId: number) => {
-    axios.get(`https://discordsv.dya.codes/api/events/chat/${channelId}/${next}`)
+    axios.get(`/api/events/chat/${channelId}/${next}`)
       .then((resp) => {
         const res = resp.data
         res.body.map((el: OldMessageInterface) => {
@@ -170,7 +171,7 @@ const MainPage = () => {
   }
 
   const getChannels = async (roomKey: string) => {
-    axios.get(`https://discordsv.dya.codes/api/events/room/${roomKey}`)
+    axios.get(`/api/events/room/${roomKey}`)
       .then((resp) => {
         const res = resp.data
         setChannels(res.body.channels)
@@ -182,7 +183,7 @@ const MainPage = () => {
   }
 
   const getUser = async (userId: number) => {
-    axios.get(`https://discordsv.dya.codes/api/users/${userId}`)
+    axios.get(`/api/users/${userId}`)
       .then((resp) => {
         const res = resp.data
         setUser(res.body)
@@ -193,7 +194,7 @@ const MainPage = () => {
   }
 
   const getServerInfo = async (roomKey: string) => {
-    const res = (await axios.get(`https://discordsv.dya.codes/api/events/room/${roomKey}`)).data.body
+    const res = (await axios.get(`/api/events/room/${roomKey}`)).data.body
     setJoinUsers(res.users)
     setServerInfo({ ownerId: res.ownerId })
 
@@ -201,7 +202,7 @@ const MainPage = () => {
   }
 
   const verify = async () => {
-    axios.get('https://discordsv.dya.codes/api/auth/status')
+    axios.get('/api/auth/status')
       .then((resp) => {
         const res = resp.data
         getUser(res.body.userId)
@@ -227,7 +228,7 @@ const MainPage = () => {
     // On any user on connect
     socket.on('onlineUsers', (users: string[]) => {
       console.table(users)
-      setOnlines(users)
+      setOnlines(users) 
     })
 
     return () => {
@@ -471,7 +472,7 @@ const MainPage = () => {
 
             <div className={styles.statusContainer}>
               <div className={styles.statusProfile}>
-                <img src={`https://discordsv.dya.codes/api/files/avatar/${user.avatar}`} alt="" />
+                <img src={`/api/files/avatar/${user.avatar}`} alt="" />
                 <div className={styles.statusInfo}>
                   <div className={styles.statusName}>{user.login}</div>
                   <div className={styles.status}>온라인</div>
@@ -534,18 +535,18 @@ const MainPage = () => {
         <div className={styles.gap}></div>
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>온라인 ㅡ {onlines.length}</div>
+        <div className={styles.asideOnline}>온라인 ㅡ { onlines.length }</div>
         {joinUsers.filter((x: { id: number }) => onlines.includes(x.id.toString())).map((el: { id: number }) => (
           <Profile key={+el.id} userId={+el.id} type={'online'} />
         ))}
 
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>오프라인 ㅡ {joinUsers.length - onlines.length}</div>
+        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length }</div>
         {joinUsers.map((el: { id: number }) => (
           !onlines.includes(el.id.toString()) ?
             <Profile key={el.id} userId={el.id} type={'offline'} />
-            : null))}
+        : null ))}
       </aside>
     </StyledMain>
   )
