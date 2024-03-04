@@ -227,7 +227,7 @@ const MainPage = () => {
     // On any user on connect
     socket.on('onlineUsers', (users: string[]) => {
       console.table(users)
-      setOnlines(users) 
+      setOnlines(users)
     })
 
     return () => {
@@ -534,18 +534,18 @@ const MainPage = () => {
         <div className={styles.gap}></div>
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>온라인 ㅡ { onlines.length }</div>
+        <div className={styles.asideOnline}>온라인 ㅡ {onlines.length}</div>
         {joinUsers.filter((x: { id: number }) => onlines.includes(x.id.toString())).map((el: { id: number }) => (
           <Profile key={+el.id} userId={+el.id} type={'online'} />
         ))}
 
         <div className={styles.gap}></div>
 
-        <div className={styles.asideOnline}>오프라인 ㅡ { joinUsers.length - onlines.length }</div>
+        <div className={styles.asideOnline}>오프라인 ㅡ {joinUsers.length - onlines.length}</div>
         {joinUsers.map((el: { id: number }) => (
           !onlines.includes(el.id.toString()) ?
             <Profile key={el.id} userId={el.id} type={'offline'} />
-        : null ))}
+            : null))}
       </aside>
     </StyledMain>
   )
