@@ -89,7 +89,7 @@ const MainPage = () => {
   const serverLogoRef = useRef<HTMLInputElement>(null)
 
   const createChannel = async () => {
-    await axios.post('/api/events/channel', {
+    await axios.post('https://discordsv.dya.codes/api/events/channel', {
       roomId: current.channel,
       name: createChannelName
     })
@@ -100,7 +100,7 @@ const MainPage = () => {
   }
 
   const joinServer = async () => {
-    await axios.get(`/api/events/room/join/${inviteCode}`)
+    await axios.get(`https://discordsv.dya.codes/api/events/room/join/${inviteCode}`)
     window.location.href = '/'
   }
 
@@ -109,7 +109,7 @@ const MainPage = () => {
     formData.append('logo', logoImage)
     formData.append('name', createServerDto.name)
 
-    axios.post('/api/events/room',
+    axios.post('https://discordsv.dya.codes/api/events/room',
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -139,7 +139,7 @@ const MainPage = () => {
     if (msg) {
       socket.emit('sendMessage', { joinKey, msg, userId: user.id })
 
-      axios.post('/api/events', {
+      axios.post('https://discordsv.dya.codes/api/events', {
         channelId: current.channel,
         message: msg
       }, { headers: { 'Content-Type': 'application/json' } })
@@ -150,7 +150,7 @@ const MainPage = () => {
   }
 
   const initChat = async (channelId: number) => {
-    axios.get(`/api/events/chat/${channelId}/0`)
+    axios.get(`https://discordsv.dya.codes/api/events/chat/${channelId}/0`)
       .then((resp) => {
         const res = resp.data
         setOldChat(res.body.reverse())
@@ -158,7 +158,7 @@ const MainPage = () => {
   }
 
   const getChats = async (channelId: number) => {
-    axios.get(`/api/events/chat/${channelId}/${next}`)
+    axios.get(`https://discordsv.dya.codes/api/events/chat/${channelId}/${next}`)
       .then((resp) => {
         const res = resp.data
         res.body.map((el: OldMessageInterface) => {
@@ -170,7 +170,7 @@ const MainPage = () => {
   }
 
   const getChannels = async (roomKey: string) => {
-    axios.get(`/api/events/room/${roomKey}`)
+    axios.get(`https://discordsv.dya.codes/api/events/room/${roomKey}`)
       .then((resp) => {
         const res = resp.data
         setChannels(res.body.channels)
@@ -182,7 +182,7 @@ const MainPage = () => {
   }
 
   const getUser = async (userId: number) => {
-    axios.get(`/api/users/${userId}`)
+    axios.get(`https://discordsv.dya.codes/api/users/${userId}`)
       .then((resp) => {
         const res = resp.data
         setUser(res.body)
@@ -193,7 +193,7 @@ const MainPage = () => {
   }
 
   const getServerInfo = async (roomKey: string) => {
-    const res = (await axios.get(`/api/events/room/${roomKey}`)).data.body
+    const res = (await axios.get(`https://discordsv.dya.codes/api/events/room/${roomKey}`)).data.body
     setJoinUsers(res.users)
     setServerInfo({ ownerId: res.ownerId })
 
@@ -201,7 +201,7 @@ const MainPage = () => {
   }
 
   const verify = async () => {
-    axios.get('/api/auth/status')
+    axios.get('https://discordsv.dya.codes/api/auth/status')
       .then((resp) => {
         const res = resp.data
         getUser(res.body.userId)
@@ -471,7 +471,7 @@ const MainPage = () => {
 
             <div className={styles.statusContainer}>
               <div className={styles.statusProfile}>
-                <img src={`/api/files/avatar/${user.avatar}`} alt="" />
+                <img src={`https://discordsv.dya.codes/api/files/avatar/${user.avatar}`} alt="" />
                 <div className={styles.statusInfo}>
                   <div className={styles.statusName}>{user.login}</div>
                   <div className={styles.status}>온라인</div>

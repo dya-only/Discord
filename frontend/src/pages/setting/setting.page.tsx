@@ -7,7 +7,7 @@ import StyledMain from '../../components/setting/main.style'
 const Setting = () => {
   const [tab, setTab] = useState<number>(1)
   const [user, setUser] = useState<any>({})
-  const [avatar, setAvatar] = useState<string>('/api/files/avatar/default.png')
+  const [avatar, setAvatar] = useState<string>('https://discordsv.dya.codes/api/files/avatar/default.png')
 
   const imgRef = useRef<HTMLInputElement | null>(null)
 
@@ -25,7 +25,7 @@ const Setting = () => {
       const formData = new FormData()
       formData.append('avatar', file)
 
-      await axios.patch(`/api/users/${user.id}`, formData, {
+      await axios.patch(`https://discordsv.dya.codes/api/users/${user.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -35,16 +35,16 @@ const Setting = () => {
   }
 
   const getUser = async (userId: number) => {
-    axios.get(`/api/users/${userId}`)
+    axios.get(`https://discordsv.dya.codes/api/users/${userId}`)
       .then((resp) => {
         const res = resp.data
         setUser(res.body)
-        setAvatar(`/api/files/avatar/${res.body.avatar}`)
+        setAvatar(`https://discordsv.dya.codes/api/files/avatar/${res.body.avatar}`)
       })
   }
 
   const verify = async () => {
-    axios.get('/api/auth/status')
+    axios.get('https://discordsv.dya.codes/api/auth/status')
       .then((resp) => {
         const res = resp.data
         getUser(res.body.userId)

@@ -18,7 +18,7 @@ const Register = () => {
   const getRegister = (e: FormEvent) => {
     e.preventDefault()
 
-    axios.post('/api/users', {
+    axios.post('https://discordsv.dya.codes/api/users', {
       email: user.email,
       nickname: user.nickname === '' ? user.login : user.nickname,
       login: user.login,
@@ -33,7 +33,7 @@ const Register = () => {
   }
 
   const verify = () => {
-    axios.get('/api/auth/status')
+    axios.get('https://discordsv.dya.codes/api/auth/status')
     .then((resp) => {
       const res = resp.data
       if (res.success) window.location.href = '/'
